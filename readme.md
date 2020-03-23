@@ -1,0 +1,1 @@
+a small library for FiveM to play better... i will add later docs
