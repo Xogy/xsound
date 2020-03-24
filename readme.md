@@ -7,13 +7,13 @@
    - PLayUrl(name, url, volume)
      Will play sound from url
       
-   - PLayUrl(name, url, volume, Vector3 vec)
+   - PlayUrlPos(name, url, volume, Vector3 vec)
      Will play sound from url at x,y,z location 
      
    - PLay(name, url, volume)
      Will play sound that is defined in html/scripts/config.js
       
-   - PLay(name, url, volume, Vector3 vec)
+   - PlayPos(name, url, volume, Vector3 vec)
      Will play sound that is defined in html/scripts/config.js at x,y,z location      
 
    - Position(name, Vector3 vec)
