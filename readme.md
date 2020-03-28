@@ -5,38 +5,38 @@
 **1. Functions (client side)**
 ------------
    - PLayUrl(name, url, volume)
-     Will play sound from url
+     <br>Will play sound from url
       
    - PlayUrlPos(name, url, volume, Vector3 vec)
-     Will play sound from url at x,y,z location 
+     <br>Will play sound from url at x,y,z location 
      
    - PLay(name, url, volume)
-     Will play sound that is defined in html/scripts/config.js
+     <br>Will play sound that is defined in html/scripts/config.js
       
    - PlayPos(name, url, volume, Vector3 vec)
-     Will play sound that is defined in html/scripts/config.js at x,y,z location      
+     <br>Will play sound that is defined in html/scripts/config.js at x,y,z location      
 
    - Position(name, Vector3 vec)
-     Will update location of sound
+     <br>Will update location of sound
      
    - Stop(name)
-     Will stop completly sound
+     <br>Will stop completly sound
      
    - Pause(name)
-     Will pause sound
+     <br>Will pause sound
      
    - Resume(name)
-     Will resume sound       
+     <br>Will resume sound       
      
    - setVolume(name,volume) volume is from 0.0 to 1.0
-     Will set a new value to volume.
+     <br>Will set a new value to volume.
  
    - getVolume(name)
-     Will return current volume of music.
+     <br>Will return current volume of music.
      
    - getInfo(name) 
-      Will return an array with info of song..
-      it will return 
+      <br>Will return an array with info of song..
+      <br>it will return 
 ```LUA
 {
 	volume,
