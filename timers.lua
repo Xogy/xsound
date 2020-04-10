@@ -12,17 +12,17 @@ defaultInfo = {
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
     --[[
-    exports.xPlayer:Play("name",1)
-    exports.xPlayer:PlayPos("name",1,pos)
+    exports.xSound:Play("name",1)
+    exports.xSound:PlayPos("name",1,pos)
 
-    exports.xPlayer:PlayUrl("name","url",1)
-    exports.xPlayer:PlayUrlPos('test',"http://relisoft.cz/assets/brainleft.mp3",1,pos)
+    exports.xSound:PlayUrl("name","url",1)
+    exports.xSound:PlayUrlPos('test',"http://relisoft.cz/assets/brainleft.mp3",1,pos)
 
-    exports.xPlayer:Pause("name")
-    exports.xPlayer:Stop("name")
-    exports.xPlayer:Resume("name")
-    exports.xPlayer:Distance("name",100)
-    exports.xPlayer:Position("name",pos)
+    exports.xSound:Pause("name")
+    exports.xSound:Stop("name")
+    exports.xSound:Resume("name")
+    exports.xSound:Distance("name",100)
+    exports.xSound:Position("name",pos)
     --]]
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
