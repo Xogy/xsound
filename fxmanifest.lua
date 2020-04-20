@@ -4,6 +4,7 @@ games { 'gta5' }
 client_scripts {
 	"config.lua",
 	"timers.lua",
+	"events.lua",
 }
 
 ui_page "html/index.html"

@@ -10,12 +10,13 @@ class SoundPlayer
 		this.max_volume = -1.0; 
 		this.div_id = "myAudio_" + Math.floor(Math.random() * 9999999); 
 	}
-	
+
 	getDistance(){ return this.distance;}
 	getLocation(){ return this.pos;     }
-	getVolume  (){ return this.volume;  }
 	getUrlSound(){ return this.url;     }
-	isDynamic()  { return this.dynamic; }
+    isDynamic  (){ return this.dynamic; }
+    getDivId   (){ return this.div_id;  }
+	getVolume  (){ return this.volume;  }
 	
 	setDistance(result)  { this.distance = result;}
 	setDynamic(result)   { this.dynamic = result; }
@@ -30,10 +31,10 @@ class SoundPlayer
 		
 		$("#" + this.div_id).prop("volume", result); 
 	}
-  
+
 	create()
 	{
-		$("body").append("<audio id='"+ this.div_id +"' src='"+this.getUrlSound()+"' onended='$(this).remove();'></audio>");		
+		$("body").append("<audio id='"+ this.div_id +"' src='"+this.getUrlSound()+"' onended='$(this).deleteAudio();'></audio>");
 	}
   
 	updateVolume(dd,maxd) 
