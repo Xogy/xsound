@@ -8,7 +8,6 @@ defaultInfo = {
     distance = 0,
     playing = false,
     loop = false,
-    isYoutube = false,
 }
 
 Citizen.CreateThread(function()
