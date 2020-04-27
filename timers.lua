@@ -7,22 +7,24 @@ defaultInfo = {
     position = nil,
     distance = 0,
     playing = false,
+    loop = false,
+    isYoutube = false,
 }
 
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
     --[[
-    exports.xSound:Play("name",1)
-    exports.xSound:PlayPos("name",1,pos)
+    exports.xPlayer:Play("name",1)
+    exports.xPlayer:PlayPos("name",1,pos)
 
-    exports.xSound:PlayUrl("name","url",1)
-    exports.xSound:PlayUrlPos('test',"http://relisoft.cz/assets/brainleft.mp3",1,pos)
+    exports.xPlayer:PlayUrl("name","url",1)
+    exports.xPlayer:PlayUrlPos('test',"http://relisoft.cz/assets/brainleft.mp3",1,pos)
 
-    exports.xSound:Pause("name")
-    exports.xSound:Stop("name")
-    exports.xSound:Resume("name")
-    exports.xSound:Distance("name",100)
-    exports.xSound:Position("name",pos)
+    exports.xPlayer:Pause("name")
+    exports.xPlayer:Stop("name")
+    exports.xPlayer:Resume("name")
+    exports.xPlayer:Distance("name",100)
+    exports.xPlayer:Position("name",pos)
     --]]
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
@@ -50,7 +52,7 @@ end
 
 exports('Distance', distance)
 
-function playurl(name_, url_, volume_)
+function playurl(name_, url_, volume_,loop_)
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -60,6 +62,7 @@ function playurl(name_, url_, volume_)
         z = 0,
         dynamic = false,
         volume = volume_,
+        loop = (loop_ == nil) and false or loop_
     })
 
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
@@ -68,11 +71,12 @@ function playurl(name_, url_, volume_)
     soundInfo[name_].url = url_
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
+    soundInfo[name_].loop = (loop_ == nil) and false or loop_
 end
 
 exports('PlayUrl', playurl)
 
-function playurlpos(name_, url_, volume_, pos)
+function playurlpos(name_, url_, volume_, pos,loop_)
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -82,6 +86,7 @@ function playurlpos(name_, url_, volume_, pos)
         z = pos.z,
         dynamic = true,
         volume = volume_,
+        loop = (loop_ == nil) and false or loop_,
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -90,11 +95,12 @@ function playurlpos(name_, url_, volume_, pos)
     soundInfo[name_].position = pos
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
+    soundInfo[name_].loop = (loop_ == nil) and false or loop_
 end
 
 exports('PlayUrlPos', playurlpos)
 
-function playpos(name_, volume_, pos)
+function playpos(name_, volume_, pos,loop_)
     SendNUIMessage({
         status = "play",
         name = name_,
@@ -103,6 +109,7 @@ function playpos(name_, volume_, pos)
         z = pos.z,
         dynamic = true,
         volume = volume_,
+        loop = (loop_ == nil) and false or loop_,
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -110,11 +117,12 @@ function playpos(name_, volume_, pos)
     soundInfo[name_].position = pos
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
+    soundInfo[name_].loop = (loop_ == nil) and false or loop_
 end
 
 exports('PlayPos', playpos)
 
-function play(name_, volume_)
+function play(name_, volume_,loop_)
     SendNUIMessage({
         status = "play",
         name = name_,
@@ -123,12 +131,14 @@ function play(name_, volume_)
         z = 0,
         dynamic = false,
         volume = volume_,
+        loop = (loop_ == nil) and false or loop_,
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
     soundInfo[name_].volume = volume_
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
+    soundInfo[name_].loop = (loop_ == nil) and false or loop_
 end
 
 exports('Play', play)
@@ -196,6 +206,7 @@ end
 exports('setVolume', volume)
 
 function getvolume(name_)
+    if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
     return soundInfo[name_].volume
 end
 

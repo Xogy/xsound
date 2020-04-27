@@ -18,7 +18,18 @@ var playerPos = [0,0,0];
 $(function(){
 	window.addEventListener('message', function(event) {
 		var item = event.data;
-		
+
+		if(item.status === "isReady")
+        {
+            var sound = soundList[item.name];
+            alert(item.name);
+            alert(item.status);
+        	if(sound == null)
+        	{
+        	    sound.isYoutubeReady(true);
+        	}
+        }
+
 		if(item.status === "position")
 		{
 			playerPos = [item.x,item.y,item.z];
@@ -45,14 +56,14 @@ $(function(){
 				sd.setVolume(item.volume);											
 				sd.setDynamic(item.dynamic);
 				sd.setLocation(item.x,item.y,item.z);
+				sd.setLoop(item.loop)
 				sd.create();				
 				sd.play();
 				soundList[item.name] = sd;
-				
-				
 				}else{				
 				sound.setLocation(item.x,item.y,item.z);
 				sound.setSoundUrl(item.url);
+				sound.setLoop(item.loop)
 				sound.delete();
 				sound.create();
 				sound.play();
@@ -130,7 +141,7 @@ function Between(loc1,loc2)
 	return distance;
 }
 
-setInterval(myMethod, 50);
+setInterval(myMethod, 100);
 
 function myMethod()
 {

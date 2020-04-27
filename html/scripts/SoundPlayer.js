@@ -1,42 +1,135 @@
-class SoundPlayer 
+function isReady(divId){
+	for (var ss in soundList)
+	{
+		var sound = soundList[ss];
+        if(sound.getDivId() === divId){
+            sound.isYoutubeReady(true);
+            break;
+        }
+	}
+}
+
+function isLooped(divId){
+	for (var ss in soundList)
+	{
+		var sound = soundList[ss];
+        if(sound.getDivId() === divId){
+            if(sound.isLoop() == true){
+                sound.delete();
+                sound.create();
+            }
+            break;
+        }
+	}
+}
+
+function ended(divId){
+	for (var ss in soundList)
+	{
+		var sound = soundList[ss];
+        if(sound.getDivId() === divId){
+            if(sound.isLoop() == false){
+                $.post('http://xsound/data_status', JSON.stringify({
+                    type: "finished",
+                    id: ss,
+                }));
+			}
+            break;
+        }
+	}
+}
+
+class SoundPlayer
 {
+    static yPlayer = null;
+    youtubeIsReady = false;
 	constructor()
-	{		
+	{
 		this.url = "test";
 		this.dynamic = false;
 		this.distance = 10;
 		this.volume = 1.0;
 		this.pos = [0.0,0.0,0.0];
 		this.max_volume = -1.0; 
-		this.div_id = "myAudio_" + Math.floor(Math.random() * 9999999); 
+		this.div_id = "myAudio_" + Math.floor(Math.random() * 9999999);
+		this.loop = false;
+		this.isYoutube = false;
+	}
+
+	isYoutubeReady(result){
+	    this.youtubeIsReady = result;
 	}
 
 	getDistance(){ return this.distance;}
 	getLocation(){ return this.pos;     }
-	getUrlSound(){ return this.url;     }
-    isDynamic  (){ return this.dynamic; }
-    getDivId   (){ return this.div_id;  }
 	getVolume  (){ return this.volume;  }
+	getUrlSound(){ return this.url;     }
+	isDynamic()  { return this.dynamic; }
+	getDivId()   { return this.div_id;  }
+	isLoop()     { return this.loop;    }
 	
-	setDistance(result)  { this.distance = result;}
-	setDynamic(result)   { this.dynamic = result; }
-	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_]; }	
-	setSoundUrl(result)  { this.url = result;     }
-	setMaxVolume(result)  { this.max_volume = result; }
+	setDistance(result)  { this.distance = result;   }
+	setDynamic(result)   { this.dynamic = result;    }
+	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_];    }
+	setSoundUrl(result)  { this.url = result;        }
+	setLoop(result)      { this.loop = result;       }
+	setMaxVolume(result) { this.max_volume = result; }
 	setVolume(result)    
 	{
 		this.volume = result; 
 		if(this.max_volume == -1) this.max_volume = result; 
-		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;	
-		
-		$("#" + this.div_id).prop("volume", result); 
-	}
-
-	create()
-	{
-		$("body").append("<audio id='"+ this.div_id +"' src='"+this.getUrlSound()+"' onended='$(this).deleteAudio();'></audio>");
+		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
+        if(!this.isYoutube)
+        {
+            $("#" + this.div_id).prop("volume", result);
+        }
+        else
+        {
+             if(this.youtubeIsReady) this.yPlayer.setVolume(result * 100);
+        }
 	}
   
+	create()
+	{
+	    var link = getYoutubeUrlId(this.getUrlSound());
+        if(link === "")
+        {
+            this.isYoutube = false;
+            if(this.isLoop())
+        	{
+                $("body").append("<audio loop id='"+ this.div_id +"' src='"+this.getUrlSound()+"'></audio>");
+                }else{
+                $("body").append("<audio id='"+ this.div_id +"' src='"+this.getUrlSound()+"' onended='$(this).deleteAudio();'></audio>");
+            }
+        }
+        else
+        {
+            this.isYoutube = true;
+            this.isYoutubeReady(false);
+            $("body").append("<div id='"+ this.div_id +"'></div>");
+            this.yPlayer = new YT.Player(this.div_id, {
+                height: '0',
+                width: '0',
+                videoId: link,
+                events: {
+                    'onReady': function(event){
+                        event.target.playVideo();
+                        isReady(event.target.getIframe().id);
+                    },
+                    'onStateChange': function(event){
+                        if (event.data == YT.PlayerState.ENDED) {
+                            isLooped(event.target.getIframe().id);
+                        }
+
+                        if (event.data == YT.PlayerState.ENDED) {
+                            ended(event.target.getIframe().id);
+                        }
+                    }
+                }
+            });
+        }
+	}
+
 	updateVolume(dd,maxd) 
 	{
         var d_max = maxd;
@@ -58,16 +151,62 @@ class SoundPlayer
   
 	play() 
 	{
-		$("#" + this.div_id).prop("volume", this.getVolume()); 
-		$("#" + this.div_id)[0].play(); 
+        if(!this.isYoutube)
+        {
+            $("#" + this.div_id).prop("volume", this.getVolume());
+            $("#" + this.div_id)[0].play();
+        }
+        else
+        {
+            if(this.youtubeIsReady) this.yPlayer.playVideo();
+        }
 	}
-	pause(){$("#" + this.div_id)[0].pause(); }	
-	del()  {$("#" + this.div_id ).  remove();}
+	pause()
+	{
+        if(!this.isYoutube)
+        {
+            $("#" + this.div_id)[0].pause();
+        }
+        else
+        {
+            if(this.youtubeIsReady) this.yPlayer.pauseVideo();
+        }
+	}
+
+	resume()
+	{
+        if(!this.isYoutube)
+        {
+            $("#" + this.div_id)[0].play();
+        }
+        else
+        {
+            if(this.youtubeIsReady) this.yPlayer.playVideo();
+        }
+	}
+
+	delete(){$("#" + this.div_id).remove(); }
 	
-	resume(){$("#" + this.div_id)[0].play();}
-	
-	delete(){$("#" + this.div_id).remove(); }	
-	
-	mute  ()  {$("#" + this.div_id).prop("volume", 0);  }	
-	unmute()  {$("#" + this.div_id).prop("volume", this.getVolume()); }
+	mute  ()
+	{
+        if(!this.isYoutube)
+        {
+            $("#" + this.div_id).prop("volume", 0);
+        }
+        else
+        {
+            if(this.youtubeIsReady) this.yPlayer.setVolume(0);
+        }
+	}
+	unmute()
+	{
+        if(!this.isYoutube)
+        {
+            $("#" + this.div_id).prop("volume",  this.getVolume());
+        }
+        else
+        {
+            if(this.youtubeIsReady) this.yPlayer.setVolume( this.getVolume() * 100);
+        }
+	}
 }
