@@ -18,18 +18,6 @@ var playerPos = [0,0,0];
 $(function(){
 	window.addEventListener('message', function(event) {
 		var item = event.data;
-
-		if(item.status === "isReady")
-        {
-            var sound = soundList[item.name];
-            alert(item.name);
-            alert(item.status);
-        	if(sound == null)
-        	{
-        	    sound.isYoutubeReady(true);
-        	}
-        }
-
 		if(item.status === "position")
 		{
 			playerPos = [item.x,item.y,item.z];
