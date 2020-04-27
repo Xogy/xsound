@@ -63,6 +63,20 @@ Citizen.CreateThread(function()
 end)
 ``` 
 
+ **How to play youtube link**    
+```LUA
+xSound = exports.xSound
+Citizen.CreateThread(function()
+    local pos = GetEntityCoords(PlayerPedId())
+    xSound:PlayUrlPos("name","https://www.youtube.com/watch?v=dQw4w9WgXcQ",1,pos)
+    --some links will not work cause to copyright or autor did not allowed to play video from iframe.
+    xSound:Distance("name",100)
+    
+    Citizen.Wait(1000*30)
+    xSound:Stop("name")
+end)
+``` 
+
 Some video preview how you can use it.
 
 https://www.youtube.com/watch?v=zyZmF5bRSA4
