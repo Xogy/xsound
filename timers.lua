@@ -204,6 +204,19 @@ end
 
 exports('setVolume', volume)
 
+function volumeMax(name_, vol)
+    SendNUIMessage({
+        status = "max_volume",
+        volume = vol,
+        name = name_,
+    })
+    if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
+
+    soundInfo[name_].volume = vol
+end
+
+exports('setVolumeMax', volumeMax)
+
 function getvolume(name_)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
     return soundInfo[name_].volume

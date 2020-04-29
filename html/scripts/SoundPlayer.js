@@ -76,7 +76,7 @@ class SoundPlayer
 	setMaxVolume(result) { this.max_volume = result; }
 	setVolume(result)    
 	{
-		this.volume = result; 
+		this.volume = result;
 		if(this.max_volume == -1) this.max_volume = result; 
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
         if(!this.isYoutube)

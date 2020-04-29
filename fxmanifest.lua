@@ -33,4 +33,5 @@ export{
 	"setVolume",
 	"getVolume",
 	"getInfo",
+	"setVolumeMax",
 }

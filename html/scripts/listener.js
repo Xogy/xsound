@@ -33,6 +33,15 @@ $(function(){
             }
         }
 
+        if(item.status === "max_volume")
+        {
+            var sound = soundList[item.name];
+            if(sound != null)
+            {
+                sound.setMaxVolume(item.volume);
+            }
+        }
+
 		if (item.status === "url") 
 		{
 			var sound = soundList[item.name];	
