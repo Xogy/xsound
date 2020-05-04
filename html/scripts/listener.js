@@ -1,18 +1,5 @@
 var soundList = [];
 var playingRightNow = [];
-for (i = 0; i < musicList.length; i++) 
-{
-	var sound = new SoundPlayer();
-	var name = musicList[i][1];
-	var distance = musicList[i][2];
-	
-	sound.setSoundUrl(musicList[i][0]);
-	//sound.setDynamic (musicList[i][1]);
-	
-	sound.setDistance(distance);
-	
-	soundList[name] = sound;
-}
 
 var playerPos = [0,0,0];
 $(function(){
@@ -53,6 +40,7 @@ $(function(){
 				sd.setVolume(item.volume);											
 				sd.setDynamic(item.dynamic);
 				sd.setLocation(item.x,item.y,item.z);
+				alert(item.loop);
 				sd.setLoop(item.loop)
 				sd.create();				
 				sd.play();

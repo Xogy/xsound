@@ -3,8 +3,12 @@ games { 'gta5' }
 
 client_scripts {
 	"config.lua",
-	"timers.lua",
-	"events.lua",
+	"client/main.lua",
+	"client/events.lua",
+
+	"client/exports/info.lua",
+	"client/exports/play.lua",
+	"client/exports/manipulation.lua",
 }
 
 ui_page "html/index.html"
@@ -19,17 +23,24 @@ files {
 }
 
 export{
-	"Distance",
-	"PlayUrl",
-	"PlayUrlPos",
-	"PlayPos",
-	"Play",
-	"Position",
-	"Stop",
-	"Resume",
-	"Pause",
-	"setVolume",
-	"getVolume",
-	"getInfo",
-	"setVolumeMax",
+	"PlayUrl", --
+	"PlayUrlPos", --
+
+	"Distance", --
+	"Position", --
+	"Destroy", --
+	"Resume",--
+	"Pause",--
+	"setVolume",--
+	"setVolumeMax",--
+
+	"getVolume",--
+	"getInfo",--
+	"soundExists", --
+	"isPaused",--
+	"isPlaying",--
+	"getDistance", --
+	"isLooped", --
+	"getPosition",--
+	"getLink", --
 }

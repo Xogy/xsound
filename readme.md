@@ -4,50 +4,58 @@
 
 **1. Functions (client side)**
 ------------
-   - PLayUrl(name, url, volume)
-     <br>Will play sound from url
-      
-   - PlayUrlPos(name, url, volume, Vector3 vec)
-     <br>Will play sound from url at x,y,z location 
-     
-   - PLay(name, url, volume)
-     <br>Will play sound that is defined in html/scripts/config.js
-      
-   - PlayPos(name, url, volume, Vector3 vec)
-     <br>Will play sound that is defined in html/scripts/config.js at x,y,z location      
 
-   - Position(name, Vector3 vec)
-     <br>Will update location of sound
+##### Playing sound
+------------
+   - PlayUrl(name, url, volume)<br>Will play sound from url (can be heared everywhere)
+      
+   - PlayUrlPos(name, url, volume, Vector3 vec) <br>Will play sound from url at x,y,z location 
+------------
+##### Manipulation with sound
+------------
+   - Position(name, Vector3 vec)<br>Will update location of sound
+   
+   - Distance(name, newDistance)<br>Will set new playing distance from location
      
-   - Stop(name)
-     <br>Will stop completly sound
+   - Destroy(name)<br>Will destroy sound
      
-   - Pause(name)
-     <br>Will pause sound
+   - Pause(name)<br>Will pause sound
      
-   - Resume(name)
-     <br>Will resume sound       
+   - Resume(name)<br>Will resume sound       
      
-   - setVolume(name,volume) volume is from 0.0 to 1.0
-     <br>Will set a new value to volume.
+   - setVolume(name,volume) volume is from 0.0 to 1.0<br>Will set a new value to volume.
      
-   - setVolumeMax(name,volume) volume is from 0.0 to 1.0
-     <br>will set new value to max volume.  
- 
-   - getVolume(name)
-     <br>Will return current volume of music.
+   - setVolumeMax(name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume.  
+------------
+ ##### Getting info about sound
+------------
+   - soundExists(name)<br>Will return true/false if sound exists
+   
+   - isPaused(name)<br>Will return true/false if song is paused
+   
+   - isPlaying(name)<br>Will return true/false if song is playing   
+   
+   - getDistance(name)<br>Will return distance in Integer 
+   
+   - isLooped(name)<br>Will return distance in Integer    
+   
+   - getVolume(name)<br>Will return current volume of music.
      
-   - getInfo(name) 
-      <br>Will return an array with info of song..
-      <br>it will return 
+   - getInfo(name) <br>Will return an array with info of song..<br>it will return 
+   
+   - getPosition(name) <br>Will return vector3
+   
+   - getLink(name) <br>Will return url link 
 ```LUA
 {
 	volume,
-	url,
-	id,
-	position, -- will be nil if position isnt set.
-	distance,
-	playing,
+    url ,
+    id,
+    position, -- will be nil if position isnt set.
+    distance,
+    playing,
+    paused,
+    loop,
 }
 ```
 ------------
@@ -71,7 +79,7 @@ end)
 xSound = exports.xsound
 Citizen.CreateThread(function()
     local pos = GetEntityCoords(PlayerPedId())
-    xSound:PlayUrlPos("name","https://www.youtube.com/watch?v=dQw4w9WgXcQ",1,pos)
+    xSound:PlayUrlPos("name","https://www.youtube.com/watch?v=6Dh-RL__uN4",1,pos)
     --some links will not work cause to copyright or autor did not allowed to play video from iframe.
     xSound:Distance("name",100)
     
