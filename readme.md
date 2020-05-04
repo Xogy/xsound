@@ -55,7 +55,7 @@
  **Example client**       
  
 ```LUA
-xSound = exports.xSound
+xSound = exports.xsound
 Citizen.CreateThread(function()
     local pos = GetEntityCoords(PlayerPedId())
     xSound:PlayUrlPos("name","http://relisoft.cz/assets/brainleft.mp3",1,pos)
@@ -68,7 +68,7 @@ end)
 
  **How to play youtube link**    
 ```LUA
-xSound = exports.xSound
+xSound = exports.xsound
 Citizen.CreateThread(function()
     local pos = GetEntityCoords(PlayerPedId())
     xSound:PlayUrlPos("name","https://www.youtube.com/watch?v=dQw4w9WgXcQ",1,pos)
