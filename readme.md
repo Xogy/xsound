@@ -70,7 +70,7 @@ Citizen.CreateThread(function()
     xSound:Distance("name",100)
     
     Citizen.Wait(1000*30)
-    xSound:Stop("name")
+    xSound:Destroy("name")
 end)
 ``` 
 
@@ -84,7 +84,7 @@ Citizen.CreateThread(function()
     xSound:Distance("name",100)
     
     Citizen.Wait(1000*30)
-    xSound:Stop("name")
+    xSound:Destroy("name")
 end)
 ``` 
 

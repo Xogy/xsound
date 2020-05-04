@@ -13,29 +13,25 @@ function isLooped(divId){
 	for (var ss in soundList)
 	{
 		var sound = soundList[ss];
-        if(sound.getDivId() === divId){
-            if(sound.isLoop() == true){
-                sound.delete();
-                sound.create();
-            }
+        if(sound.getDivId() === divId && sound.isLoop() == true){
+            sound.delete();
+            sound.create();
             sound.destroyYoutubeApi();
             break;
         }
-	}
+    }
 }
 
 function ended(divId){
 	for (var ss in soundList)
 	{
 		var sound = soundList[ss];
-        if(sound.getDivId() === divId){
+        if(sound.getDivId() === divId && sound.isLoop() == false){
             sound.destroyYoutubeApi();
-            if(sound.isLoop() == false){
-                $.post('http://xsound/data_status', JSON.stringify({
-                    type: "finished",
-                    id: ss,
-                }));
-			}
+            $.post('http://xsound/data_status', JSON.stringify({
+                type: "finished",
+                id: ss,
+            }));
             break;
         }
 	}
@@ -87,9 +83,7 @@ class SoundPlayer
         }
         else
         {
-             if (this.yPlayer) {
-                if(this.youtubeIsReady) this.yPlayer.setVolume(result * 100);
-             }
+            if(this.yPlayer && this.youtubeIsReady) this.yPlayer.setVolume(result * 100);
         }
 	}
   
@@ -139,6 +133,7 @@ class SoundPlayer
         if (this.yPlayer) {
             this.yPlayer.stopVideo();
             this.yPlayer.destroy();
+            this.youtubeIsReady = false;
             this.yPlayer = null;
         }
     }
