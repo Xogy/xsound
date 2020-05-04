@@ -18,6 +18,7 @@ function isLooped(divId){
                 sound.delete();
                 sound.create();
             }
+            sound.destroyYoutubeApi();
             break;
         }
 	}
@@ -28,6 +29,7 @@ function ended(divId){
 	{
 		var sound = soundList[ss];
         if(sound.getDivId() === divId){
+            sound.destroyYoutubeApi();
             if(sound.isLoop() == false){
                 $.post('http://xsound/data_status', JSON.stringify({
                     type: "finished",
@@ -85,7 +87,9 @@ class SoundPlayer
         }
         else
         {
-             if(this.youtubeIsReady) this.yPlayer.setVolume(result * 100);
+             if (this.yPlayer) {
+                if(this.youtubeIsReady) this.yPlayer.setVolume(result * 100);
+             }
         }
 	}
   
@@ -129,6 +133,15 @@ class SoundPlayer
             });
         }
 	}
+
+    destroyYoutubeApi()
+    {
+        if (this.yPlayer) {
+            this.yPlayer.stopVideo();
+            this.yPlayer.destroy();
+            this.yPlayer = null;
+        }
+    }
 
 	updateVolume(dd,maxd) 
 	{

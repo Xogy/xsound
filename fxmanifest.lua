@@ -10,8 +10,6 @@ client_scripts {
 ui_page "html/index.html"
 
 files {
-	"Newtonsoft.Json.dll",
-	
 	"html/index.html",
 	
 	"html/scripts/config.js",

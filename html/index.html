@@ -19,6 +19,7 @@
 				var sound = soundList[ss];
 				if(sound.getDivId() === $(this).attr('id'))
 				{
+					sound.destroyYoutubeApi();
 					$.post('http://xsound/data_status', JSON.stringify({
 						type: "finished",
 						id: ss,

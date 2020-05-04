@@ -122,6 +122,7 @@ $(function(){
 			var sound = soundList[item.name];		
 			if(sound != null)
 			{
+			    sound.destroyYoutubeApi();
 				sound.delete();
 			}
 		}
