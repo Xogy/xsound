@@ -35,27 +35,27 @@
    
    - isPlaying(name)<br>Will return true/false if song is playing   
    
-   - getDistance(name)<br>Will return distance in Integer 
+   - isLooped(name)<br>Will return true/false if sound is looped
    
-   - isLooped(name)<br>Will return distance in Integer    
+   - getDistance(name)<br>Will return distance in Integer  
    
-   - getVolume(name)<br>Will return current volume of music.
-     
-   - getInfo(name) <br>Will return an array with info of song..<br>it will return 
+   - getVolume(name)<br>Will return current volume of music.   
    
    - getPosition(name) <br>Will return vector3
    
    - getLink(name) <br>Will return url link 
+   
+   - getInfo(name) <br>Will return an array with info of song..<br>it will return    
 ```LUA
 {
-	volume,
-    url ,
-    id,
-    position, -- will be nil if position isnt set.
-    distance,
-    playing,
-    paused,
-    loop,
+volume,   -- value from 0.0 to 1.0
+url ,     -- sound url
+id,       -- id 
+position, -- will be nil if position isnt set.
+distance, -- distance in integer
+playing,  -- true/false
+paused,   -- true/false
+loop,     -- true/false
 }
 ```
 ------------
@@ -88,7 +88,13 @@ Citizen.CreateThread(function()
 end)
 ``` 
 
-Some video preview how you can use it.
+Showcase what i did with my api
+
+https://www.youtube.com/watch?v=OOf6PZFpfkI
+
+https://www.youtube.com/watch?v=JRTVga_FwGw
+
+Showcase how it can stream sound at game
 
 https://www.youtube.com/watch?v=zyZmF5bRSA4
 

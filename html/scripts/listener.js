@@ -48,7 +48,8 @@ $(function(){
 				}else{				
 				sound.setLocation(item.x,item.y,item.z);
 				sound.setSoundUrl(item.url);
-				sound.setLoop(item.loop)
+				sound.setLoop(item.loop);
+				sound.destroyYoutubeApi();
 				sound.delete();
 				sound.create();
 				sound.play();
@@ -127,13 +128,11 @@ function Between(loc1,loc2)
 	return distance;
 }
 
-setInterval(myMethod, 100);
-
-function myMethod()
+function updateVolumeSounds()
 {
-	for (var ss in soundList)
+	for (var soundName in soundList)
 	{
-		var sound = soundList[ss];
+		var sound = soundList[soundName];
 		if(sound.isDynamic())
 		{
 			var distance = Between(playerPos,sound.getLocation());
@@ -148,26 +147,4 @@ function myMethod()
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+setInterval(updateVolumeSounds, 100);

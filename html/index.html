@@ -14,16 +14,13 @@
 	<script>
 	jQuery.fn.extend({
 		deleteAudio: function () {
-			for (var ss in soundList)
+			for (var soundName in soundList)
 			{
-				var sound = soundList[ss];
+				var sound = soundList[soundName];
 				if(sound.getDivId() === $(this).attr('id'))
 				{
 					sound.destroyYoutubeApi();
-					$.post('http://xsound/data_status', JSON.stringify({
-						type: "finished",
-						id: ss,
-					}));
+					$.post('http://xsound/data_status', JSON.stringify({type: "finished", id: soundName }));
 				}
 			}
 			$(this).remove();

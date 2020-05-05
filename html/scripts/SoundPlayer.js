@@ -1,7 +1,7 @@
 function isReady(divId){
-	for (var ss in soundList)
+	for (var soundName in soundList)
 	{
-		var sound = soundList[ss];
+		var sound = soundList[soundName];
         if(sound.getDivId() === divId){
             sound.isYoutubeReady(true);
             break;
@@ -10,28 +10,25 @@ function isReady(divId){
 }
 
 function isLooped(divId){
-	for (var ss in soundList)
+	for (var soundName in soundList)
 	{
-		var sound = soundList[ss];
+		var sound = soundList[soundName];
         if(sound.getDivId() === divId && sound.isLoop() == true){
+            sound.destroyYoutubeApi();
             sound.delete();
             sound.create();
-            sound.destroyYoutubeApi();
             break;
         }
     }
 }
 
 function ended(divId){
-	for (var ss in soundList)
+	for (var soundName in soundList)
 	{
-		var sound = soundList[ss];
+		var sound = soundList[soundName];
         if(sound.getDivId() === divId && sound.isLoop() == false){
             sound.destroyYoutubeApi();
-            $.post('http://xsound/data_status', JSON.stringify({
-                type: "finished",
-                id: ss,
-            }));
+            $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
             break;
         }
 	}
@@ -106,8 +103,6 @@ class SoundPlayer
             this.isYoutubeReady(false);
             $("body").append("<div id='"+ this.div_id +"'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
-                height: '0',
-                width: '0',
                 videoId: link,
                 events: {
                     'onReady': function(event){
