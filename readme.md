@@ -1,4 +1,4 @@
-#a small library for Fivem to play better sounds at game.
+#Improved audio library for FiveM
 
 ### SoundSystem functions
 
