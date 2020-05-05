@@ -40,7 +40,6 @@ $(function(){
 				sd.setVolume(item.volume);											
 				sd.setDynamic(item.dynamic);
 				sd.setLocation(item.x,item.y,item.z);
-				alert(item.loop);
 				sd.setLoop(item.loop)
 				sd.create();				
 				sd.play();

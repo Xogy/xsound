@@ -103,6 +103,8 @@ class SoundPlayer
             this.isYoutubeReady(false);
             $("body").append("<div id='"+ this.div_id +"'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
+                width: "0",
+                height: "0",
                 videoId: link,
                 events: {
                     'onReady': function(event){
