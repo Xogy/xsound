@@ -88,14 +88,16 @@ Citizen.CreateThread(function()
 end)
 ``` 
 
-Showcase what i did with my api
-
-https://www.youtube.com/watch?v=OOf6PZFpfkI
-
-https://www.youtube.com/watch?v=JRTVga_FwGw
-
 Showcase how it can stream sound at game
 
 https://www.youtube.com/watch?v=zyZmF5bRSA4
 
 https://www.youtube.com/watch?v=19Q2GVYElSE
+
+Showcase what i did with my api
+
+#These are just a showcase! i will not share them....
+
+https://www.youtube.com/watch?v=OOf6PZFpfkI
+
+https://www.youtube.com/watch?v=JRTVga_FwGw
