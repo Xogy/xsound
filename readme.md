@@ -88,6 +88,55 @@ Citizen.CreateThread(function()
 end)
 ``` 
 
+ **How to be followed by the sound**    
+ Client:
+```LUA
+xSound = exports.xsound
+
+local musicId = "music_id"
+Citizen.CreateThread(function()
+    Citizen.Wait(1000)
+    local pos
+    while true do
+        Citizen.Wait(100)
+        if xSound:soundExists(musicId) then
+            if xSound:isPlaying(musicId) then
+                pos = GetEntityCoords(PlayerPedId())
+                TriggerServerEvent("myevent:soundStatus", "position", musicId, { position = pos })
+            else
+                Citizen.Wait(1000)
+            end
+        else
+            Citizen.Wait(1000)
+        end
+    end
+end)
+
+RegisterCommand("playmusic", function(source, args, rawCommand)
+    local pos = GetEntityCoords(PlayerPedId())
+    TriggerServerEvent("myevent:soundStatus", "play", musicId, { position = pos, link = "https://www.youtube.com/watch?v=6Dh-RL__uN4" })
+end, false)
+
+RegisterNetEvent("myevent:soundStatus")
+AddEventHandler("myevent:soundStatus", function(type, musicId, data)
+    if type == "position" then
+        if xSound:soundExists(musicId) then
+            xSound:Position(musicId, data.position)
+        end
+    end
+
+    if type == "play" then
+        xSound:PlayUrlPos(musicId, data.link, 1, data.position)
+    end
+end)
+``` 
+ Server:
+```LUA
+RegisterNetEvent("myevent:soundStatus")
+AddEventHandler("myevent:soundStatus", function(type, musicId, data)
+    TriggerClientEvent("myevent:soundStatus", -1, type, musicId, data)
+end)
+``` 
 Showcase how it can stream sound at game
 
 https://www.youtube.com/watch?v=zyZmF5bRSA4
