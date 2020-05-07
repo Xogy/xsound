@@ -93,9 +93,10 @@ end)
 ```LUA
 xSound = exports.xsound
 
-local musicId = "music_id"
+local musicId
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
+    musicId = "music_id_" .. PlayerPedId()
     local pos
     while true do
         Citizen.Wait(100)
