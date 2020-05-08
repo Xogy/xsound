@@ -94,13 +94,14 @@ end)
 xSound = exports.xsound
 
 local musicId
+local playing = false
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
     musicId = "music_id_" .. PlayerPedId()
     local pos
     while true do
         Citizen.Wait(100)
-        if xSound:soundExists(musicId) then
+        if xSound:soundExists(musicId) and playing then
             if xSound:isPlaying(musicId) then
                 pos = GetEntityCoords(PlayerPedId())
                 TriggerServerEvent("myevent:soundStatus", "position", musicId, { position = pos })
@@ -115,6 +116,7 @@ end)
 
 RegisterCommand("playmusic", function(source, args, rawCommand)
     local pos = GetEntityCoords(PlayerPedId())
+    playing = true
     TriggerServerEvent("myevent:soundStatus", "play", musicId, { position = pos, link = "https://www.youtube.com/watch?v=6Dh-RL__uN4" })
 end, false)
 
@@ -128,6 +130,7 @@ AddEventHandler("myevent:soundStatus", function(type, musicId, data)
 
     if type == "play" then
         xSound:PlayUrlPos(musicId, data.link, 1, data.position)
+        xSound:Distance(musicId, 20)
     end
 end)
 ``` 
