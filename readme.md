@@ -23,9 +23,9 @@
      
    - Resume(name)<br>Will resume sound       
      
-   - setVolume(name,volume) volume is from 0.0 to 1.0<br>Will set a new value to volume.
+   - setVolume(name,volume) volume is from 0.0 to 1.0<br>Will set a new value to volume. Should be used for non 3D sound
      
-   - setVolumeMax(name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume.  
+   - setVolumeMax(name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume. Should be used only for 3D sound
 ------------
  ##### Getting info about sound
 ------------
