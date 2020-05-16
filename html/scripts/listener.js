@@ -29,44 +29,45 @@ $(function(){
             }
         }
 
-		if (item.status === "url") 
+		if (item.status === "url")
 		{
-			var sound = soundList[item.name];	
-						
+			var sound = soundList[item.name];
+
 			if(sound == null)
 			{
 				var sd = new SoundPlayer();
-				sd.setSoundUrl(item.url);		
-				sd.setVolume(item.volume);											
+				sd.setSoundUrl(item.url);
 				sd.setDynamic(item.dynamic);
 				sd.setLocation(item.x,item.y,item.z);
 				sd.setLoop(item.loop)
-				sd.create();				
+				sd.create();
+				sd.setVolume(item.volume);
 				sd.play();
 				soundList[item.name] = sd;
-				}else{				
+				}else{
 				sound.setLocation(item.x,item.y,item.z);
 				sound.setSoundUrl(item.url);
 				sound.setLoop(item.loop);
 				sound.destroyYoutubeApi();
 				sound.delete();
 				sound.create();
+				sound.setVolume(item.volume);
 				sound.play();
 			}
 		}
-		
-		if (item.status === "distance") 
+
+		if (item.status === "distance")
 		{
-			var sound = soundList[item.name];		
+			var sound = soundList[item.name];
 			if(sound != null)
 			{
 				sound.setDistance(item.distance);
 			}
 		}
-		
-		if (item.status === "play") 
+
+		if (item.status === "play")
 		{
-			var sound = soundList[item.name];		
+			var sound = soundList[item.name];
 			if(sound != null)
 			{
 				sound.delete();
@@ -77,44 +78,44 @@ $(function(){
 				sound.play();
 			}
 		}
-		
-		if (item.status === "soundPosition") 
+
+		if (item.status === "soundPosition")
 		{
-			var sound = soundList[item.name];		
+			var sound = soundList[item.name];
 			if(sound != null)
 			{
 				sound.setLocation(item.x,item.y,item.z);
 			}
 		}
-		
-		if (item.status === "resume") 
+
+		if (item.status === "resume")
 		{
-			var sound = soundList[item.name];		
+			var sound = soundList[item.name];
 			if(sound != null)
 			{
 				sound.resume();
 			}
 		}
-		
-		if (item.status === "pause") 
+
+		if (item.status === "pause")
 		{
-			var sound = soundList[item.name];		
+			var sound = soundList[item.name];
 			if(sound != null)
 			{
 				sound.pause();
 			}
 		}
-		
-		if (item.status === "delete") 
+
+		if (item.status === "delete")
 		{
-			var sound = soundList[item.name];		
+			var sound = soundList[item.name];
 			if(sound != null)
 			{
 			    sound.destroyYoutubeApi();
 				sound.delete();
 			}
 		}
-    })	
+    })
 });  	
 
 function Between(loc1,loc2)

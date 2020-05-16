@@ -4,6 +4,8 @@ function isReady(divId){
 		var sound = soundList[soundName];
         if(sound.getDivId() === divId){
             sound.isYoutubeReady(true);
+            if(!sound.isDynamic()) sound.setVolume(sound.getVolume())
+            if(sound.isDynamic())  sound.setMaxVolume(sound.getVolume())
             break;
         }
 	}
@@ -148,7 +150,7 @@ class SoundPlayer
         {
             distance = distance * 100;
             var far_away = 100 - distance;
-            vol = (this.max_volume / 100) * far_away;
+            vol = (this.max_volume / 100) * far_away;;
 			this.setVolume(vol);
         }
         else this.setVolume(0);
