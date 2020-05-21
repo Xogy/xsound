@@ -11,6 +11,11 @@ client_scripts {
 	"client/exports/manipulation.lua",
 }
 
+server_scripts {
+	"server/exports/play.lua",
+	"server/exports/manipulation.lua",
+}
+
 ui_page "html/index.html"
 
 files {
@@ -43,4 +48,17 @@ export{
 	"isLooped", --
 	"getPosition",--
 	"getLink", --
+	"isDynamic",--
+}
+
+server_export{
+	"PlayUrl", --
+	"PlayUrlPos", --
+
+	"Distance", --
+	"Position", --
+	"Destroy", --
+	"Resume",--
+	"Pause",--
+	"setVolume",--
 }

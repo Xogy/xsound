@@ -18,6 +18,7 @@ function PlayUrl(name_, url_, volume_, loop_)
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+    soundInfo[name_].isDynamic = false
 end
 
 exports('PlayUrl', PlayUrl)
@@ -42,6 +43,7 @@ function PlayUrlPos(name_, url_, volume_, pos, loop_)
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+    soundInfo[name_].isDynamic = true
 end
 
 exports('PlayUrlPos', PlayUrlPos)

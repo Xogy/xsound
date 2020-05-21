@@ -9,6 +9,7 @@ defaultInfo = {
     playing = false,
     paused = false,
     loop = false,
+    isDynamic = false,
 }
 
 function getLink(name_)
@@ -67,3 +68,9 @@ function getVolume(name_)
 end
 
 exports('getVolume', getVolume)
+
+function isDynamic(name_)
+    return soundInfo[name_].isDynamic
+end
+
+exports('isDynamic', isDynamic)

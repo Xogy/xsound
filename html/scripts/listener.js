@@ -147,4 +147,4 @@ function updateVolumeSounds()
 	}
 }
 
-setInterval(updateVolumeSounds, 100);
+setInterval(updateVolumeSounds, 50);

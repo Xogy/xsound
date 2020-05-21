@@ -43,6 +43,8 @@
    
    - getPosition(name) <br>Will return vector3
    
+   - isDynamic(name) <br>Will return if sound is 3D or 2D (3D = true, 2D = false)
+   
    - getLink(name) <br>Will return url link 
    
    - getInfo(name) <br>Will return an array with info of song..<br>it will return    
@@ -58,6 +60,33 @@ paused,   -- true/false
 loop,     -- true/false
 }
 ```
+------------
+**1. Functions (Server side)**
+------------
+
+##### Playing sound
+------------
+   - PlayUrl(source, name, url, volume)<br>Will play sound from url (can be heared everywhere)
+      
+   - PlayUrlPos(source, name, url, volume, Vector3 vec) <br>Will play sound from url at x,y,z location 
+------------
+##### Manipulation with sound
+------------
+   - -1 for source work aswell
+
+   - Position(source, name, Vector3 vec)<br>Will update location of sound
+   
+   - Distance(source, name, newDistance)<br>Will set new playing distance from location
+     
+   - Destroy(source, name)<br>Will destroy sound
+     
+   - Pause(source, name)<br>Will pause sound
+     
+   - Resume(source, name)<br>Will resume sound       
+     
+   - setVolume(source, name,volume) volume is from 0.0 to 1.0<br>Will set a new value to volume. Should be used for non 3D sound
+     
+   - setVolumeMax(source, name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume. Should be used only for 3D sound
 ------------
 
  **Example client**       

@@ -94,9 +94,9 @@ class SoundPlayer
             this.isYoutube = false;
             if(this.isLoop())
         	{
-                $("body").append("<audio loop id='"+ this.div_id +"' src='"+this.getUrlSound()+"'></audio>");
+        	    $("body").append("<audio loop id='"+ this.div_id +"'><source src='"+this.getUrlSound()+"'></audio>")
                 }else{
-                $("body").append("<audio id='"+ this.div_id +"' src='"+this.getUrlSound()+"' onended='$(this).deleteAudio();'></audio>");
+                $("body").append("<audio id='"+ this.div_id +"' onended='$(this).deleteAudio();'><source src='"+this.getUrlSound()+"'></audio>")
             }
         }
         else
@@ -105,9 +105,11 @@ class SoundPlayer
             this.isYoutubeReady(false);
             $("body").append("<div id='"+ this.div_id +"'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
+                videoId: link,
+                origin: window.location.href,
+                enablejsapi: 1,
                 width: "0",
                 height: "0",
-                videoId: link,
                 events: {
                     'onReady': function(event){
                         event.target.playVideo();
