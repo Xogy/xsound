@@ -26,39 +26,3 @@ files {
 	"html/scripts/SoundPlayer.js",
 	"html/scripts/functions.js",
 }
-
-export{
-	"PlayUrl", --
-	"PlayUrlPos", --
-
-	"Distance", --
-	"Position", --
-	"Destroy", --
-	"Resume",--
-	"Pause",--
-	"setVolume",--
-	"setVolumeMax",--
-
-	"getVolume",--
-	"getInfo",--
-	"soundExists", --
-	"isPaused",--
-	"isPlaying",--
-	"getDistance", --
-	"isLooped", --
-	"getPosition",--
-	"getLink", --
-	"isDynamic",--
-}
-
-server_export{
-	"PlayUrl", --
-	"PlayUrlPos", --
-
-	"Distance", --
-	"Position", --
-	"Destroy", --
-	"Resume",--
-	"Pause",--
-	"setVolume",--
-}
