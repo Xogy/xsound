@@ -67,6 +67,7 @@ distance, -- distance in integer
 playing,  -- true/false
 paused,   -- true/false
 loop,     -- true/false
+isDynamic,-- true/false
 }
 ```
 ------------
