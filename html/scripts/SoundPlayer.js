@@ -213,7 +213,11 @@ class SoundPlayer
         }
 	}
 
-	delete(){$("#" + this.div_id).remove(); }
+	delete()
+	{
+	    this.audioPlayer.pause();
+	    this.audioPlayer = null;
+	}
 	
 	mute  ()
 	{
