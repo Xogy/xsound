@@ -19,21 +19,37 @@ function isLooped(divId){
             sound.destroyYoutubeApi();
             sound.delete();
             sound.create();
+            sound.play();
             break;
         }
     }
 }
 
 function ended(divId){
-	for (var soundName in soundList)
-	{
-		var sound = soundList[soundName];
-        if(sound.getDivId() === divId && sound.isLoop() == false){
-            sound.destroyYoutubeApi();
-            $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
-            break;
+    if(divId == null)
+    {
+    	for (var soundName in soundList)
+    	{
+            var sound = soundList[soundName];
+            if(!sound.isPlaying())
+            {
+                $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
+                break;
+            }
+    	}
+    }
+    else
+    {
+    	for (var soundName in soundList)
+    	{
+            var sound = soundList[soundName];
+            if(sound.getDivId() === divId && sound.isLoop() == false){
+                sound.destroyYoutubeApi();
+                $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
+                break;
+            }
         }
-	}
+    }
 }
 
 class SoundPlayer
@@ -51,6 +67,7 @@ class SoundPlayer
 		this.div_id = "myAudio_" + Math.floor(Math.random() * 9999999);
 		this.loop = false;
 		this.isYoutube = false;
+		this.audioPlayer = null;
 	}
 
 	isYoutubeReady(result){
@@ -78,7 +95,7 @@ class SoundPlayer
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
         if(!this.isYoutube)
         {
-            $("#" + this.div_id).prop("volume", result);
+            this.audioPlayer.volume(result);
         }
         else
         {
@@ -92,12 +109,14 @@ class SoundPlayer
         if(link === "")
         {
             this.isYoutube = false;
-            if(this.isLoop())
-        	{
-        	    $("body").append("<audio loop id='"+ this.div_id +"'><source src='"+this.getUrlSound()+"'></audio>")
-                }else{
-                $("body").append("<audio id='"+ this.div_id +"' onended='$(this).deleteAudio();'><source src='"+this.getUrlSound()+"'></audio>")
-            }
+
+            this.audioPlayer = new Howl({
+                src: [this.getUrlSound()],
+                loop: this.isLoop(),
+                onend: function(event){
+                    ended(null);
+                }
+            });
         }
         else
         {
@@ -157,13 +176,13 @@ class SoundPlayer
         }
         else this.setVolume(0);
 	}
-  
+
 	play() 
 	{
         if(!this.isYoutube)
         {
-            $("#" + this.div_id).prop("volume", this.getVolume());
-            $("#" + this.div_id)[0].play();
+            this.audioPlayer.volume(this.getVolume());
+            this.audioPlayer.play();
         }
         else
         {
@@ -174,7 +193,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            $("#" + this.div_id)[0].pause();
+            this.audioPlayer.pause();
         }
         else
         {
@@ -186,7 +205,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            $("#" + this.div_id)[0].play();
+            this.audioPlayer.play();
         }
         else
         {
@@ -200,7 +219,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            $("#" + this.div_id).prop("volume", 0);
+            this.audioPlayer.volume(0);
         }
         else
         {
@@ -211,11 +230,20 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            $("#" + this.div_id).prop("volume",  this.getVolume());
+            this.audioPlayer.volume(this.getVolume());
         }
         else
         {
             if(this.youtubeIsReady) this.yPlayer.setVolume( this.getVolume() * 100);
         }
+	}
+
+	isPlaying()
+	{
+        if(!this.isYoutube)
+        {
+            return this.audioPlayer.playing();
+        }
+        return false;
 	}
 }

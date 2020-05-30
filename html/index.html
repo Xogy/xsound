@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://s.ytimg.com/yts/jsbin/www-widgetapi-vflJJaNgk/www-widgetapi.js"></script>
 		<script src="https://www.youtube.com/iframe_api"></script>
@@ -11,20 +12,4 @@
 		<script src="./scripts/config.js" type="text/javascript"></script>
 		<script src="./scripts/listener.js" type="text/javascript"></script>
 	</body>
-	<script>
-	jQuery.fn.extend({
-		deleteAudio: function () {
-			for (var soundName in soundList)
-			{
-				var sound = soundList[soundName];
-				if(sound.getDivId() === $(this).attr('id'))
-				{
-					sound.destroyYoutubeApi();
-					$.post('http://xsound/data_status', JSON.stringify({type: "finished", id: soundName }));
-				}
-			}
-			$(this).remove();
-		}
-	});
-	</script>
 </html>

@@ -1,5 +1,15 @@
 #Improved audio library for FiveM
 
+Can work with api interact sound<br>
+Just make sure you take all sounds from interact<br>
+sound and move them to xsound/html/sounds
+
+Thanks to<br>
+https://github.com/plunkettscott
+<br>
+for<br>
+https://github.com/plunkettscott/interact-sound<br>
+
 ### SoundSystem functions
 
 **1. Functions (client side)**
