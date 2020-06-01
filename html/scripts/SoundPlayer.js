@@ -95,7 +95,7 @@ class SoundPlayer
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
         if(!this.isYoutube)
         {
-            this.audioPlayer.volume(result);
+            if(this.audioPlayer != null) this.audioPlayer.volume(result);
         }
         else
         {
@@ -113,6 +113,8 @@ class SoundPlayer
             this.audioPlayer = new Howl({
                 src: [this.getUrlSound()],
                 loop: this.isLoop(),
+                html5: true,
+                format: ['mp3'],
                 onend: function(event){
                     ended(null);
                 }
@@ -181,8 +183,10 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            this.audioPlayer.volume(this.getVolume());
-            this.audioPlayer.play();
+            if(this.audioPlayer != null){
+                this.audioPlayer.volume(this.getVolume());
+                this.audioPlayer.play();
+            }
         }
         else
         {
@@ -193,7 +197,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            this.audioPlayer.pause();
+            if(this.audioPlayer != null) this.audioPlayer.pause();
         }
         else
         {
@@ -205,7 +209,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            this.audioPlayer.play();
+            if(this.audioPlayer != null) this.audioPlayer.play();
         }
         else
         {
@@ -215,15 +219,17 @@ class SoundPlayer
 
 	delete()
 	{
-	    this.audioPlayer.pause();
-	    this.audioPlayer = null;
+	    if(this.audioPlayer != null){
+            this.audioPlayer.pause();
+            this.audioPlayer = null;
+	    }
 	}
 	
 	mute  ()
 	{
         if(!this.isYoutube)
         {
-            this.audioPlayer.volume(0);
+            if(this.audioPlayer != null) this.audioPlayer.volume(0);
         }
         else
         {
@@ -234,7 +240,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            this.audioPlayer.volume(this.getVolume());
+            if(this.audioPlayer != null) this.audioPlayer.volume(this.getVolume());
         }
         else
         {
@@ -246,7 +252,7 @@ class SoundPlayer
 	{
         if(!this.isYoutube)
         {
-            return this.audioPlayer.playing();
+            return this.audioPlayer != null  && this.audioPlayer.playing();
         }
         return false;
 	}
