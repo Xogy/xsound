@@ -119,6 +119,8 @@ class SoundPlayer
                     ended(null);
                 }
             });
+             $("body").append("<div id = '"+ this.div_id +"'>"+this.getUrlSound() +"</div>")
+             $("#" + this.div_id).remove();
         }
         else
         {
@@ -223,6 +225,7 @@ class SoundPlayer
             this.audioPlayer.pause();
             this.audioPlayer = null;
 	    }
+	    $("#" + this.div_id).remove();
 	}
 	
 	mute  ()
