@@ -12,15 +12,28 @@ https://github.com/plunkettscott/interact-sound<br>
 ### SoundSystem functions
 
 **1. Functions (client side)**
+
 ------------
 
-##### Playing sound
+### Playing sound
+
 ------------
-   - PlayUrl(name, url, volume)<br>Will play sound from url (can be heared everywhere)
+
+   - PlayUrl(name, url, volume, loop, options)<br>Will play sound from url (can be heared everywhere)<br>argument loop and options are optional, doesn't have to be used.
       
-   - PlayUrlPos(name, url, volume, Vector3 vec) <br>Will play sound from url at x,y,z location 
+   - PlayUrlPos(name, url, volume, Vector3 vec, loop, options) <br>Will play sound from url at x,y,z location <br>argument loop and options are optional, doesn't have to be used.
+   
+   options list
+   - onPlayStart
+   - onPlayEnd
+   - onLoading
+   - onPlayPause
+   - onPlayResume
+   
 ------------
-##### Manipulation with sound
+
+### Manipulation with sound
+
 ------------
    - Position(name, Vector3 vec)<br>Will update location of sound
    
@@ -35,8 +48,32 @@ https://github.com/plunkettscott/interact-sound<br>
    - setVolume(name,volume) volume is from 0.0 to 1.0<br>Will set a new value to volume. Should be used for non 3D sound
      
    - setVolumeMax(name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume. Should be used only for 3D sound
+   
+   - setTimeStamp(name, time) will set a new timestamp.
 ------------
- ##### Getting info about sound
+
+### Events (client side only)
+
+------------
+
+   - onPlayStart(name, function)
+   <br>This event will trigger after the sound
+   <br>is loaded and start playing in game.
+   
+   - onPlayEnd(name, function)
+   <br>This event will be triggered after sound end.
+   
+   - onLoading(name, function)
+   <br>This event will be triggered when the sound start loading.
+   - onPlayPause(name, function)
+   <br>This event will be triggered whenever you pause sound.
+   - onPlayResume(name, function)
+   <br>This event will be triggered whenever you resume sound.
+   
+------------
+
+### Getting info about sound
+
 ------------
    - soundExists(name)<br>Will return true/false if sound exists
    
@@ -54,33 +91,44 @@ https://github.com/plunkettscott/interact-sound<br>
    
    - isDynamic(name) <br>Will return if sound is 3D or 2D (3D = true, 2D = false)
    
+   - getTimeStamp(name), -- returns current timestamp
+     
+   - getMaxDuration(name), -- returns max duration of sound
+   
    - getLink(name) <br>Will return url link 
    
    - getInfo(name) <br>Will return an array with info of song..<br>it will return    
 ```LUA
 {
-volume,   -- value from 0.0 to 1.0
-url ,     -- sound url
-id,       -- id 
-position, -- will be nil if position isnt set.
-distance, -- distance in integer
-playing,  -- true/false
-paused,   -- true/false
-loop,     -- true/false
-isDynamic,-- true/false
+volume,      -- value from 0.0 to 1.0
+url ,        -- sound url
+id,          -- id 
+position,    -- will be nil if position isnt set.
+distance,    -- distance in integer
+playing,     -- true/false
+paused,      -- true/false
+loop,        -- true/false
+isDynamic,   -- true/false
+timeStamp,   -- returns current timestamp
+maxDuration, -- returns max duration of sound
 }
 ```
 ------------
+
 **1. Functions (Server side)**
+
 ------------
 
-##### Playing sound
+### Playing sound
+
 ------------
    - PlayUrl(source, name, url, volume)<br>Will play sound from url (can be heared everywhere)
       
    - PlayUrlPos(source, name, url, volume, Vector3 vec) <br>Will play sound from url at x,y,z location 
 ------------
-##### Manipulation with sound
+
+### Manipulation with sound
+
 ------------
    - -1 for source work aswell
 
@@ -97,9 +145,53 @@ isDynamic,-- true/false
    - setVolume(source, name,volume) volume is from 0.0 to 1.0<br>Will set a new value to volume. Should be used for non 3D sound
      
    - setVolumeMax(source, name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume. Should be used only for 3D sound
+   
+   - setTimeStamp(source ,name, time) will set a new timestamp.
+   <br>TIMESTAMP is in a seconds only !
 ------------
 
- **Example client**       
+##**Example client**       
+ 
+ **example how to use options.**   
+ ```LUA
+ xSound = exports.xsound
+ Citizen.CreateThread(function()
+     local pos = GetEntityCoords(PlayerPedId())
+     local options =
+     {
+         onPlayStart = function(event) -- event argument returns getInfo(id)
+             print("oh yeah! PARTY!")
+         end,
+         onPlayEnd = function(event) 
+             print("oh... already end ? :( Song name ? pls")
+             print(event.url)
+         end,
+     }   
+ 
+     xSound:PlayUrlPos("name","http://relisoft.cz/assets/brainleft.mp3",1,pos, false, options)
+ end)   
+ ```
+
+ **example how to use new events.**     
+ ```LUA
+ xSound = exports.xsound
+ Citizen.CreateThread(function()
+    local pos = GetEntityCoords(PlayerPedId())
+    local id = "name"
+    xSound:PlayUrlPos(id ,"http://relisoft.cz/assets/brainleft.mp3",1,pos)
+
+    xSound:onPlayStart(id, function(event) -- event argument returns getInfo(id) 
+        print("oh yeah! PARTY!")
+    end)
+
+    xSound:onPlayEnd(id, function(event)  
+        print("oh... already end ? :( Song name ? pls")
+        print(event.url)
+    end)
+ end)   
+ ```
+ 
+  **How to play from direct URL**   
  
 ```LUA
 xSound = exports.xsound

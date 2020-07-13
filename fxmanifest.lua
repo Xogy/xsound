@@ -9,6 +9,7 @@ client_scripts {
 	"client/exports/info.lua",
 	"client/exports/play.lua",
 	"client/exports/manipulation.lua",
+	"client/exports/events.lua",
 
 	"client/emulator/interact_sound/client.lua",
 }

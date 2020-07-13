@@ -1,17 +1,5 @@
 soundInfo = {}
 
-defaultInfo = {
-    volume = 1.0,
-    url = "",
-    id = "",
-    position = nil,
-    distance = 0,
-    playing = false,
-    paused = false,
-    loop = false,
-    isDynamic = false,
-}
-
 function getLink(name_)
     return soundInfo[name_].url
 end
@@ -74,3 +62,15 @@ function isDynamic(name_)
 end
 
 exports('isDynamic', isDynamic)
+
+function getTimeStamp(name_)
+    return soundInfo[name_].timeStamp or -1
+end
+
+exports('getTimeStamp', getTimeStamp)
+
+function getMaxDuration(name_)
+    return soundInfo[name_].maxDuration or -1
+end
+
+exports('getMaxDuration', getMaxDuration)

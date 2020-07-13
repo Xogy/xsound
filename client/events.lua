@@ -3,11 +3,38 @@ RegisterNUICallback("data_status", function(data)
         soundInfo[data.id].playing = false
         TriggerEvent("xSound:songStopPlaying", data.id)
     end
+    if data.type == "maxDuration" then
+        soundInfo[data.id].maxDuration = data.time
+    end
+end)
+
+RegisterNUICallback("events", function(data)
+    local id = data.id
+    local type = data.type
+    if type == "onPlay" then
+        if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayStart ~= nil then
+            globalOptionsCache[id].onPlayStart(getInfo(id))
+        end
+    end
+    if type == "onEnd" then
+        if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayEnd ~= nil then
+            globalOptionsCache[id].onPlayEnd(getInfo(id))
+        end
+    end
+    if type == "onLoading" then
+        if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onLoading ~= nil then
+            globalOptionsCache[id].onLoading(getInfo(id))
+        end
+    end
 end)
 
 RegisterNetEvent("xsound:stateSound")
 AddEventHandler("xsound:stateSound", function(state, data)
     local soundId = data.soundId
+
+    if state == "timestamp" then
+        setTimeStamp(soundId, data.time)
+    end
 
     if state == "play" then
         PlayUrl(soundId, data.url, data.volume, data.loop or false)
@@ -19,13 +46,13 @@ AddEventHandler("xsound:stateSound", function(state, data)
 
     if state == "position" then
         if soundExists(soundId) then
-            Position(soundId,data.position)
+            Position(soundId, data.position)
         end
     end
 
     if state == "distance" then
         if soundExists(soundId) then
-            Distance(soundId,data.distance)
+            Distance(soundId, data.distance)
         end
     end
 

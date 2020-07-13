@@ -20,6 +20,15 @@ $(function(){
             }
         }
 
+        if(item.status === "timestamp")
+        {
+            var sound = soundList[item.name];
+            if(sound != null)
+            {
+                sound.setTimeStamp(item.timestamp);
+            }
+        }
+
         if(item.status === "max_volume")
         {
             var sound = soundList[item.name];
@@ -36,6 +45,7 @@ $(function(){
 			if(sound == null)
 			{
 				var sd = new SoundPlayer();
+				sd.setName(item.name);
 				sd.setSoundUrl(item.url);
 				sd.setDynamic(item.dynamic);
 				sd.setLocation(item.x,item.y,item.z);
@@ -45,6 +55,7 @@ $(function(){
 				sd.play();
 				soundList[item.name] = sd;
 				}else{
+				sound.setName(item.name);
 				sound.setLocation(item.x,item.y,item.z);
 				sound.setSoundUrl(item.url);
 				sound.setLoop(item.loop);
@@ -128,7 +139,7 @@ function Between(loc1,loc2)
 	return distance;
 }
 
-function updateVolumeSounds()
+function updateVolumeSounds(test)
 {
 	for (var soundName in soundList)
 	{

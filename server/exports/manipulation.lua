@@ -48,3 +48,12 @@ function setVolume(source, name_, vol)
 end
 
 exports('setVolume', setVolume)
+
+function setTimeStamp(source, name_, time_)
+    TriggerClientEvent("xsound:stateSound", source, "timestamp", {
+        soundId = name_,
+        time = time_
+    })
+end
+
+exports('setTimeStamp', setTimeStamp)

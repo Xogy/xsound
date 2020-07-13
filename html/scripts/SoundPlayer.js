@@ -1,57 +1,3 @@
-function isReady(divId){
-	for (var soundName in soundList)
-	{
-		var sound = soundList[soundName];
-        if(sound.getDivId() === divId){
-            sound.isYoutubeReady(true);
-            if(!sound.isDynamic()) sound.setVolume(sound.getVolume())
-            if(sound.isDynamic())  sound.setMaxVolume(sound.getVolume())
-            break;
-        }
-	}
-}
-
-function isLooped(divId){
-	for (var soundName in soundList)
-	{
-		var sound = soundList[soundName];
-        if(sound.getDivId() === divId && sound.isLoop() == true){
-            sound.destroyYoutubeApi();
-            sound.delete();
-            sound.create();
-            sound.play();
-            break;
-        }
-    }
-}
-
-function ended(divId){
-    if(divId == null)
-    {
-    	for (var soundName in soundList)
-    	{
-            var sound = soundList[soundName];
-            if(!sound.isPlaying())
-            {
-                $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
-                break;
-            }
-    	}
-    }
-    else
-    {
-    	for (var soundName in soundList)
-    	{
-            var sound = soundList[soundName];
-            if(sound.getDivId() === divId && sound.isLoop() == false){
-                sound.destroyYoutubeApi();
-                $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
-                break;
-            }
-        }
-    }
-}
-
 class SoundPlayer
 {
     static yPlayer = null;
@@ -59,6 +5,7 @@ class SoundPlayer
 	constructor()
 	{
 		this.url = "test";
+		this.name = "";
 		this.dynamic = false;
 		this.distance = 10;
 		this.volume = 1.0;
@@ -67,6 +14,7 @@ class SoundPlayer
 		this.div_id = "myAudio_" + Math.floor(Math.random() * 9999999);
 		this.loop = false;
 		this.isYoutube = false;
+		this.load = false;
 		this.audioPlayer = null;
 	}
 
@@ -81,7 +29,14 @@ class SoundPlayer
 	isDynamic()  { return this.dynamic; }
 	getDivId()   { return this.div_id;  }
 	isLoop()     { return this.loop;    }
-	
+	getName()    { return this.name;    }
+	loaded()     { return this.load;    }
+
+	getAudioPlayer()    { return this.audioPlayer; }
+	getYoutubePlayer()  { return this.yPlayer;     }
+
+    setLoaded(result)    { this.load = result;   }
+	setName(result)      { this.name = result;   }
 	setDistance(result)  { this.distance = result;   }
 	setDynamic(result)   { this.dynamic = result;    }
 	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_];    }
@@ -99,12 +54,19 @@ class SoundPlayer
         }
         else
         {
-            if(this.yPlayer && this.youtubeIsReady) this.yPlayer.setVolume(result * 100);
+            if(this.yPlayer && this.youtubeIsReady){
+                this.yPlayer.setVolume(result * 100);
+            }
         }
 	}
   
 	create()
 	{
+	    $.post('http://xsound/events', JSON.stringify(
+	    {
+            type: "onLoading",
+            id: this.getName(),
+	    }));
 	    var link = getYoutubeUrlId(this.getUrlSound());
         if(link === "")
         {
@@ -114,20 +76,28 @@ class SoundPlayer
                 src: [this.getUrlSound()],
                 loop: this.isLoop(),
                 html5: true,
+                volume: 0.0,
                 format: ['mp3'],
                 onend: function(event){
                     ended(null);
-                }
+                },
+                onplay: function(){
+                    isReady("nothing", true);
+                },
             });
-             $("body").append("<div id = '"+ this.div_id +"'>"+this.getUrlSound() +"</div>")
-             $("#" + this.div_id).remove();
+            $("#" + this.div_id).remove();
+            $("body").append("<div id = '"+ this.div_id +"'>"+this.getUrlSound() +"</div>")
         }
         else
         {
             this.isYoutube = true;
             this.isYoutubeReady(false);
+            $("#" + this.div_id).remove();
             $("body").append("<div id='"+ this.div_id +"'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
+
+                startSeconds:Number,
+
                 videoId: link,
                 origin: window.location.href,
                 enablejsapi: 1,
@@ -135,6 +105,7 @@ class SoundPlayer
                 height: "0",
                 events: {
                     'onReady': function(event){
+                        updateVolumeSounds();
                         event.target.playVideo();
                         isReady(event.target.getIframe().id);
                     },
@@ -187,12 +158,20 @@ class SoundPlayer
         {
             if(this.audioPlayer != null){
                 this.audioPlayer.volume(this.getVolume());
+                if(this.isDynamic()){
+                    updateVolumeSounds();
+                }
                 this.audioPlayer.play();
             }
         }
         else
         {
-            if(this.youtubeIsReady) this.yPlayer.playVideo();
+            if(this.youtubeIsReady){
+                if(this.isDynamic()){
+                    updateVolumeSounds();
+                }
+                this.yPlayer.playVideo();
+            }
         }
 	}
 	pause()
@@ -248,6 +227,18 @@ class SoundPlayer
         else
         {
             if(this.youtubeIsReady) this.yPlayer.setVolume( this.getVolume() * 100);
+        }
+	}
+
+	setTimeStamp(time)
+	{
+        if(!this.isYoutube)
+        {
+            this.audioPlayer.seek(time);
+        }
+        else
+        {
+            this.yPlayer.seekTo(time);
         }
 	}
 
