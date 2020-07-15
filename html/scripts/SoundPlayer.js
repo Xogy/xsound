@@ -86,7 +86,7 @@ class SoundPlayer
                 },
             });
             $("#" + this.div_id).remove();
-            $("body").append("<div id = '"+ this.div_id +"'>"+this.getUrlSound() +"</div>")
+            $("body").append("<div id = '"+ this.div_id +"' style='display:none'>"+this.getUrlSound() +"</div>")
         }
         else
         {
