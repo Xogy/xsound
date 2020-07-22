@@ -1,10 +1,12 @@
 RegisterNUICallback("data_status", function(data)
-    if data.type == "finished" then
-        soundInfo[data.id].playing = false
-        TriggerEvent("xSound:songStopPlaying", data.id)
-    end
-    if data.type == "maxDuration" then
-        soundInfo[data.id].maxDuration = data.time
+    if soundInfo[data.id] ~= nil then
+        if data.type == "finished" then
+            soundInfo[data.id].playing = false
+            TriggerEvent("xSound:songStopPlaying", data.id)
+        end
+        if data.type == "maxDuration" then
+            soundInfo[data.id].maxDuration = data.time
+        end
     end
 end)
 

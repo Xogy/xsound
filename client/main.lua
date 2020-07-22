@@ -17,7 +17,6 @@ function getDefaultInfo()
 end
 
 Citizen.CreateThread(function()
-    Citizen.Wait(1000)
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
@@ -39,8 +38,10 @@ Citizen.CreateThread(function()
     while true do
         for k, v in pairs(soundInfo) do
             if v.playing then
-                if getInfo(v.id).timeStamp < getInfo(v.id).maxDuration then
-                    getInfo(v.id).timeStamp = getInfo(v.id).timeStamp + 1
+                if getInfo(v.id).timeStamp ~= nil and getInfo(v.id).maxDuration ~= nil then
+                    if getInfo(v.id).timeStamp < getInfo(v.id).maxDuration then
+                        getInfo(v.id).timeStamp = getInfo(v.id).timeStamp + 1
+                    end
                 end
             end
         end
