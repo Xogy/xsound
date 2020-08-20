@@ -35,6 +35,7 @@ https://github.com/plunkettscott/interact-sound<br>
 ### Manipulation with sound
 
 ------------
+
    - Position(name, Vector3 vec)<br>Will update location of sound
    
    - Distance(name, newDistance)<br>Will set new playing distance from location
@@ -50,6 +51,16 @@ https://github.com/plunkettscott/interact-sound<br>
    - setVolumeMax(name,volume) volume is from 0.0 to 1.0<br>will set new value to max volume. Should be used only for 3D sound
    
    - setTimeStamp(name, time) will set a new timestamp.
+   
+------------
+   
+### Effects on sound
+
+------------
+   
+   - fadeOut(name, time)
+   - fadeIn(name, time, volume)
+
 ------------
 
 ### Events (client side only)

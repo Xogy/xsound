@@ -10,11 +10,13 @@ client_scripts {
 	"client/exports/play.lua",
 	"client/exports/manipulation.lua",
 	"client/exports/events.lua",
+	"client/effects/main.lua",
 
 	"client/emulator/interact_sound/client.lua",
 }
 
 server_scripts {
+	"config.lua",
 	"server/exports/play.lua",
 	"server/exports/manipulation.lua",
 

@@ -62,6 +62,7 @@ $(function(){
 				sound.destroyYoutubeApi();
 				sound.delete();
 				sound.create();
+				sound.setMaxVolume(item.volume);
 				sound.setVolume(item.volume);
 				sound.play();
 			}
