@@ -1,6 +1,6 @@
 #Improved audio library for FiveM
 
-Can work with api interact sound<br>
+Can work with API interact sound<br>
 Just make sure you take all sounds from interact<br>
 sound and move them to xsound/html/sounds
 
@@ -19,13 +19,13 @@ https://github.com/plunkettscott/interact-sound<br>
 
 ------------
 
-   - PlayUrl(name, url, volume, loop, options)<br>Will play sound from url (can be heared everywhere)<br>argument loop and options are optional, doesn't have to be used.
+   - PlayUrl(name, URL, volume, loop, options)<br>Will play sound from URL (can be heard everywhere)<br>argument loop and options are optional, doesn't have to be used.
       
    - PlayUrlPos(name, url, volume, Vector3 vec, loop, options) <br>Will play sound from url at x,y,z location <br>argument loop and options are optional, doesn't have to be used.
    
    - TextToSpeech(name, lang, text, volume, loop, options)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc 
    
-   - TextToSpeechPos(name, lang, text, volume, Vector3 vec, loop, options)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc.. Will be heard only at coords you set.
+   - TextToSpeechPos(name, lang, text, volume, Vector3 vec, loop, options)<br>lang is in what language will be pronounced such like<br>en-US,cs-CZ etc.. Will be heard only at coords you set.
       
    
    options list
@@ -138,20 +138,20 @@ maxDuration, -- returns max duration of sound
 ### Playing sound
 
 ------------
-   - PlayUrl(source, name, url, volume, loop)<br>Will play sound from url (can be heared everywhere)
+   - PlayUrl(source, name, URL, volume, loop)<br>Will play sound from URL (can be heard everywhere)
       
    - PlayUrlPos(source, name, url, volume, Vector3 vec, loop) <br>Will play sound from url at x,y,z location 
    
    - TextToSpeech(source, name, lang, text, volume, loop)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc 
       
-   - TextToSpeechPos(source, name, lang, text, volume, Vector3 vec, loop)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc.. Will be heard only at coords you set.
+   - TextToSpeechPos(source, name, lang, text, volume, Vector3 vec, loop)<br>lang is in what language will be pronounced such like<br>en-US,cs-CZ etc.. Will be heard only at coords you set.
          
 ------------
 
 ### Manipulation with sound
 
 ------------
-   - -1 for source work aswell
+   - -1 for source work as well
 
    - Position(source, name, Vector3 vec)<br>Will update location of sound
    
@@ -232,7 +232,7 @@ xSound = exports.xsound
 Citizen.CreateThread(function()
     local pos = GetEntityCoords(PlayerPedId())
     xSound:PlayUrlPos("name","https://www.youtube.com/watch?v=6Dh-RL__uN4",1,pos)
-    --some links will not work cause to copyright or autor did not allowed to play video from iframe.
+    --some links will not work cause to copyright or author did not allow to play video from an iframe.
     xSound:Distance("name",100)
     
     Citizen.Wait(1000*30)
@@ -299,9 +299,9 @@ https://www.youtube.com/watch?v=zyZmF5bRSA4
 
 https://www.youtube.com/watch?v=19Q2GVYElSE
 
-Showcase what i did with my api
+Showcase what I did with my API
 
-#These are just a showcase! i will not share them....
+#These are just a showcase! I will not share them....
 
 https://www.youtube.com/watch?v=OOf6PZFpfkI
 
