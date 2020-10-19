@@ -26,9 +26,12 @@ function isReady(divId, howler){
                     id: sound.getName(),
                 }));
 
+                var time = 3;
+                if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
+
                 $.post('http://xsound/data_status', JSON.stringify(
                 {
-                    time: sound.getAudioPlayer()._duration,
+                    time: time,
                     type: "maxDuration",
                     id: sound.getName(),
                 }));

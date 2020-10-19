@@ -126,10 +126,12 @@ class SoundPlayer
     destroyYoutubeApi()
     {
         if (this.yPlayer) {
-            this.yPlayer.stopVideo();
-            this.yPlayer.destroy();
-            this.youtubeIsReady = false;
-            this.yPlayer = null;
+            if (typeof this.yPlayer.stopVideo === "function" && typeof this.yPlayer.destroy === "function") {
+                this.yPlayer.stopVideo();
+                this.yPlayer.destroy();
+                this.youtubeIsReady = false;
+                this.yPlayer = null;
+            }
         }
     }
 

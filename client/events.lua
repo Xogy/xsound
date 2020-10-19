@@ -38,6 +38,14 @@ AddEventHandler("xsound:stateSound", function(state, data)
         setTimeStamp(soundId, data.time)
     end
 
+    if state == "texttospeech" then
+        TextToSpeech(soundId, data.lang, data.url, data.volume, data.loop or false)
+    end
+
+    if state == "texttospeechpos" then
+        TextToSpeechPos(soundId, data.lang, data.url, data.volume, data.position, data.loop or false)
+    end
+
     if state == "play" then
         PlayUrl(soundId, data.url, data.volume, data.loop or false)
     end

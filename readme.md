@@ -23,6 +23,11 @@ https://github.com/plunkettscott/interact-sound<br>
       
    - PlayUrlPos(name, url, volume, Vector3 vec, loop, options) <br>Will play sound from url at x,y,z location <br>argument loop and options are optional, doesn't have to be used.
    
+   - TextToSpeech(name, lang, text, volume, loop, options)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc 
+   
+   - TextToSpeechPos(name, lang, text, volume, Vector3 vec, loop, options)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc.. Will be heard only at coords you set.
+      
+   
    options list
    - onPlayStart
    - onPlayEnd
@@ -133,9 +138,14 @@ maxDuration, -- returns max duration of sound
 ### Playing sound
 
 ------------
-   - PlayUrl(source, name, url, volume)<br>Will play sound from url (can be heared everywhere)
+   - PlayUrl(source, name, url, volume, loop)<br>Will play sound from url (can be heared everywhere)
       
-   - PlayUrlPos(source, name, url, volume, Vector3 vec) <br>Will play sound from url at x,y,z location 
+   - PlayUrlPos(source, name, url, volume, Vector3 vec, loop) <br>Will play sound from url at x,y,z location 
+   
+   - TextToSpeech(source, name, lang, text, volume, loop)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc 
+      
+   - TextToSpeechPos(source, name, lang, text, volume, Vector3 vec, loop)<br>lang is in what language will be pronouced such like<br>en-US,cs-CZ etc.. Will be heard only at coords you set.
+         
 ------------
 
 ### Manipulation with sound

@@ -5,6 +5,7 @@ var playerPos = [0,0,0];
 $(function(){
 	window.addEventListener('message', function(event) {
 		var item = event.data;
+
 		if(item.status === "position")
 		{
 			playerPos = [item.x,item.y,item.z];
