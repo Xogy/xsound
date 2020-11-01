@@ -12,6 +12,8 @@ client_scripts {
 	"client/exports/events.lua",
 	"client/effects/main.lua",
 
+	--"admin/main.lua",
+
 	"client/emulator/interact_sound/client.lua",
 }
 
