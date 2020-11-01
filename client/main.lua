@@ -16,20 +16,27 @@ function getDefaultInfo()
     }
 end
 
+
+---- a simple optimization, no one is playing a music 24/7 in the server, so 0.3ms it too much (in my opinion), in this way the script will go to 0.1 when there is no music playing in the server
 Citizen.CreateThread(function()
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
     while true do
         Citizen.Wait(refresh)
-        ped = PlayerPedId()
-        pos = GetEntityCoords(ped)
-        SendNUIMessage({
-            status = "position",
-            x = pos.x,
-            y = pos.y,
-            z = pos.z
-        })
+        for k, v in pairs(soundInfo) do
+			if v.playing then
+				ped = PlayerPedId()
+				pos = GetEntityCoords(ped)
+				SendNUIMessage({
+					status = "position",
+					x = pos.x,
+					y = pos.y,
+					z = pos.z
+				})
+				return
+			end
+		end
     end
 end)
 
