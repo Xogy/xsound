@@ -1,4 +1,5 @@
 function PlayUrl(name_, url_, volume_, loop_, options)
+    if disableMusic then return end
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -26,6 +27,7 @@ end
 exports('PlayUrl', PlayUrl)
 
 function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
+    if disableMusic then return end
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -53,6 +55,7 @@ end
 exports('PlayUrlPos', PlayUrlPos)
 
 function TextToSpeech(name_, lang, text, volume_, loop_, options)
+    if disableMusic then return end
     local url = string.format("https://translate.google.com/translate_tts?ie=UTF-8&q=%s&tl=%s&total=1&idx=0&client=tw-ob", text, lang)
     PlayUrl(name_, url, volume_, loop_, options)
 end
@@ -60,6 +63,7 @@ end
 exports('TextToSpeech', TextToSpeech)
 
 function TextToSpeechPos(name_, lang, text, volume_, pos, loop_, options)
+    if disableMusic then return end
     local url = string.format("https://translate.google.com/translate_tts?ie=UTF-8&q=%s&tl=%s&total=1&idx=0&client=tw-ob", text, lang)
     PlayUrlPos(name_, url, volume_, pos, loop_, options)
 end

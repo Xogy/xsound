@@ -22,6 +22,7 @@ RegisterNUICallback("events", function(data)
         if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayEnd ~= nil then
             globalOptionsCache[id].onPlayEnd(getInfo(id))
         end
+
     end
     if type == "onLoading" then
         if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onLoading ~= nil then
@@ -35,7 +36,9 @@ AddEventHandler("xsound:stateSound", function(state, data)
     local soundId = data.soundId
 
     if state == "timestamp" then
-        setTimeStamp(soundId, data.time)
+        if soundExists(soundId) then
+            setTimeStamp(soundId, data.time)
+        end
     end
 
     if state == "texttospeech" then

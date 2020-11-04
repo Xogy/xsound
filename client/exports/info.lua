@@ -74,3 +74,21 @@ function getMaxDuration(name_)
 end
 
 exports('getMaxDuration', getMaxDuration)
+
+function isPlayerInStreamerMode()
+    return disableMusic
+end
+
+exports('isPlayerInStreamerMode', isPlayerInStreamerMode)
+
+function getAllAudioInfo()
+    return soundInfo
+end
+
+exports('getAllAudioInfo', getAllAudioInfo)
+
+function isPlayerCloseToAnySound()
+    return isPlayerCloseToMusic
+end
+
+exports('isPlayerCloseToAnySound', isPlayerCloseToAnySound)

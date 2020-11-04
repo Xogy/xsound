@@ -5,128 +5,120 @@ var playerPos = [0,0,0];
 $(function(){
 	window.addEventListener('message', function(event) {
 		var item = event.data;
-
-		if(item.status === "position")
-		{
-			playerPos = [item.x,item.y,item.z];
-		}
-
-		if(item.status === "volume")
+        switch(item.status)
         {
-            var sound = soundList[item.name];
-			if(sound != null)
-			{
-                sound.setVolume(item.volume);
-                sound.setMaxVolume(item.volume);
-            }
-        }
+            case "position":
+                playerPos = [item.x,item.y,item.z];
+                break;
 
-        if(item.status === "timestamp")
-        {
-            var sound = soundList[item.name];
-            if(sound != null)
-            {
-                sound.setTimeStamp(item.timestamp);
-            }
-        }
+            case "volume":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setVolume(item.volume);
+                    sound.setMaxVolume(item.volume);
+                }
+                break;
 
-        if(item.status === "max_volume")
-        {
-            var sound = soundList[item.name];
-            if(sound != null)
-            {
-                sound.setMaxVolume(item.volume);
-            }
-        }
+            case "timestamp":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setTimeStamp(item.timestamp);
+                }
+                break;
 
-		if (item.status === "url")
-		{
-			var sound = soundList[item.name];
+            case "max_volume":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setMaxVolume(item.volume);
+                }
+                break;
 
-			if(sound == null)
-			{
-				var sd = new SoundPlayer();
-				sd.setName(item.name);
-				sd.setSoundUrl(item.url);
-				sd.setDynamic(item.dynamic);
-				sd.setLocation(item.x,item.y,item.z);
-				sd.setLoop(item.loop)
-				sd.create();
-				sd.setVolume(item.volume);
-				sd.play();
-				soundList[item.name] = sd;
-				}else{
-				sound.setName(item.name);
-				sound.setLocation(item.x,item.y,item.z);
-				sound.setSoundUrl(item.url);
-				sound.setLoop(item.loop);
-				sound.destroyYoutubeApi();
-				sound.delete();
-				sound.create();
-				sound.setMaxVolume(item.volume);
-				sound.setVolume(item.volume);
-				sound.play();
-			}
-		}
+            case "url":
+                var sound = soundList[item.name];
 
-		if (item.status === "distance")
-		{
-			var sound = soundList[item.name];
-			if(sound != null)
-			{
-				sound.setDistance(item.distance);
-			}
-		}
+                if(sound == null)
+                {
+                    var sd = new SoundPlayer();
+                    sd.setName(item.name);
+                    sd.setSoundUrl(item.url);
+                    sd.setDynamic(item.dynamic);
+                    sd.setLocation(item.x,item.y,item.z);
+                    sd.setLoop(item.loop)
+                    sd.create();
+                    sd.setVolume(item.volume);
+                    sd.play();
+                    soundList[item.name] = sd;
+                    }else{
+                    $.post('http://xsound/events', JSON.stringify({ type: "onEnd", id: item.name}));
+                    sound.setName(item.name);
+                    sound.setLocation(item.x,item.y,item.z);
+                    sound.setSoundUrl(item.url);
+                    sound.setLoop(item.loop);
+                    sound.destroyYoutubeApi();
+                    sound.delete();
+                    sound.create();
+                    sound.setMaxVolume(item.volume);
+                    sound.setVolume(item.volume);
+                    sound.play();
+                }
+                break;
 
-		if (item.status === "play")
-		{
-			var sound = soundList[item.name];
-			if(sound != null)
-			{
-				sound.delete();
-				sound.create();
-				sound.setVolume(item.volume);
-				sound.setDynamic(item.dynamic);
-				sound.setLocation(item.x,item.y,item.z);
-				sound.play();
-			}
-		}
+            case "distance":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setDistance(item.distance);
+                }
+                break;
 
-		if (item.status === "soundPosition")
-		{
-			var sound = soundList[item.name];
-			if(sound != null)
-			{
-				sound.setLocation(item.x,item.y,item.z);
-			}
-		}
+            case "play":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.delete();
+                    sound.create();
+                    sound.setVolume(item.volume);
+                    sound.setDynamic(item.dynamic);
+                    sound.setLocation(item.x,item.y,item.z);
+                    sound.play();
+                }
+                break;
 
-		if (item.status === "resume")
-		{
-			var sound = soundList[item.name];
-			if(sound != null)
-			{
-				sound.resume();
-			}
-		}
+            case "soundPosition":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setLocation(item.x,item.y,item.z);
+                }
+                break;
 
-		if (item.status === "pause")
-		{
-			var sound = soundList[item.name];
-			if(sound != null)
-			{
-				sound.pause();
-			}
-		}
+            case "resume":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.resume();
+                }
+                break;
 
-		if (item.status === "delete")
-		{
-			var sound = soundList[item.name];
-			if(sound != null)
-			{
-			    sound.destroyYoutubeApi();
-				sound.delete();
-			}
+            case"pause":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.pause();
+                }
+                break;
+
+            case "delete":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.destroyYoutubeApi();
+                    sound.delete();
+                }
+                break;
 		}
     })
 });  	
@@ -141,11 +133,12 @@ function Between(loc1,loc2)
 	return distance;
 }
 
-function updateVolumeSounds(test)
+function updateVolumeSounds()
 {
+    var sound = null;
 	for (var soundName in soundList)
 	{
-		var sound = soundList[soundName];
+		sound = soundList[soundName];
 		if(sound.isDynamic())
 		{
 			var distance = Between(playerPos,sound.getLocation());
@@ -160,4 +153,4 @@ function updateVolumeSounds(test)
 	}
 }
 
-setInterval(updateVolumeSounds, 50);
+setInterval(updateVolumeSounds, refreshTime);

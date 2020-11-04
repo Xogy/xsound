@@ -1,4 +1,6 @@
 globalOptionsCache = {}
+isPlayerCloseToMusic = false
+disableMusic = false
 
 function getDefaultInfo()
     return {
@@ -16,28 +18,49 @@ function getDefaultInfo()
     }
 end
 
+-- updating position on html side so we can count how much volume the sound needs.
 CreateThread(function()
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
     while true do
         Wait(refresh)
-        for k, v in pairs(soundInfo) do
-			if v.playing then
-				ped = PlayerPedId()
-				pos = GetEntityCoords(ped)
-				SendNUIMessage({
-					status = "position",
-					x = pos.x,
-					y = pos.y,
-					z = pos.z
-				})
-				break
-			end
-		end
+        if not disableMusic and isPlayerCloseToMusic then
+            ped = PlayerPedId()
+            pos = GetEntityCoords(ped)
+            SendNUIMessage({
+                status = "position",
+                x = pos.x,
+                y = pos.y,
+                z = pos.z
+            })
+        else
+            Wait(500)
+        end
     end
 end)
 
+-- checking if player is close to sound so we can switch bool value to true.
+CreateThread(function()
+    local ped = PlayerPedId()
+    local playerPos = GetEntityCoords(ped)
+    while true do
+        Wait(200)
+        ped = PlayerPedId()
+        playerPos = GetEntityCoords(ped)
+        isPlayerCloseToMusic = false
+        for k, v in pairs(soundInfo) do
+            if v.position ~= nil and v.isDynamic then
+                if #(v.position - playerPos) < v.distance + config.distanceBeforeUpdatingPos then
+                    isPlayerCloseToMusic = true
+                    break
+                end
+            end
+        end
+    end
+end)
+
+-- updating timeStamp
 CreateThread(function()
     Wait(1100)
     while true do

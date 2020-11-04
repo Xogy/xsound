@@ -107,13 +107,19 @@ https://github.com/plunkettscott/interact-sound<br>
    
    - isDynamic(name) <br>Will return if sound is 3D or 2D (3D = true, 2D = false)
    
-   - getTimeStamp(name), -- returns current timestamp
+   - getTimeStamp(name)<br>returns current timestamp
      
-   - getMaxDuration(name), -- returns max duration of sound
+   - getMaxDuration(name) <br>returns max duration of sound
    
    - getLink(name) <br>Will return url link 
    
-   - getInfo(name) <br>Will return an array with info of song..<br>it will return    
+   - getInfo(name) <br>Will return an array with info of song...
+   
+   - isPlayerInStreamerMode() <br>will return if player got streamer mode enabled. 
+   
+   - getAllAudioInfo() <br>Will return array of all sound
+   
+   - isPlayerCloseToAnySound() <br>will return true if player is close to any sound.
 ```LUA
 {
 volume,      -- value from 0.0 to 1.0

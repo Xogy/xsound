@@ -5,14 +5,13 @@ client_scripts {
 	"config.lua",
 	"client/main.lua",
 	"client/events.lua",
+	"client/commands.lua",
 
 	"client/exports/info.lua",
 	"client/exports/play.lua",
 	"client/exports/manipulation.lua",
 	"client/exports/events.lua",
 	"client/effects/main.lua",
-
-	--"admin/main.lua",
 
 	"client/emulator/interact_sound/client.lua",
 }
