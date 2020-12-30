@@ -1,5 +1,5 @@
 var soundList = [];
-var playingRightNow = [];
+var closeToPlayer = [];
 
 var playerPos = [0,0,0];
 $(function(){
@@ -133,8 +133,9 @@ function Between(loc1,loc2)
 	return distance;
 }
 
-function updateVolumeSounds()
+function addToCache()
 {
+    closeToPlayer = [];
     var sound = null;
 	for (var soundName in soundList)
 	{
@@ -143,14 +144,38 @@ function updateVolumeSounds()
 		{
 			var distance = Between(playerPos,sound.getLocation());
 			var distance_max = sound.getDistance();
-			if(distance < distance_max)
+			if(distance < distance_max + 40)
 			{
-				sound.updateVolume(distance,distance_max);
-				continue;
+                closeToPlayer[soundName] = soundName;
 			}
-			sound.mute();
+			else
+			{
+			    sound.mute();
+			}
 		}
 	}
+}
+
+setInterval(addToCache, 1000);
+
+function updateVolumeSounds()
+{
+    var sound = null;
+    for (var name in closeToPlayer)
+    {
+        sound = soundList[name];
+        if(sound.isDynamic())
+        {
+            var distance = Between(playerPos,sound.getLocation());
+            var distance_max = sound.getDistance();
+            if(distance < distance_max)
+            {
+                sound.updateVolume(distance,distance_max);
+                continue;
+            }
+            sound.mute();
+        }
+    }
 }
 
 setInterval(updateVolumeSounds, refreshTime);
