@@ -15,6 +15,7 @@ function getDefaultInfo()
         isDynamic = false,
         timeStamp = 0,
         maxDuration = 0,
+        destroyOnFinish = true,
     }
 end
 

@@ -22,7 +22,9 @@ RegisterNUICallback("events", function(data)
         if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayEnd ~= nil then
             globalOptionsCache[id].onPlayEnd(getInfo(id))
         end
-
+        if soundInfo[id].destroyOnFinish then
+            Destroy(id)
+        end
     end
     if type == "onLoading" then
         if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onLoading ~= nil then
@@ -34,6 +36,12 @@ end)
 RegisterNetEvent("xsound:stateSound")
 AddEventHandler("xsound:stateSound", function(state, data)
     local soundId = data.soundId
+
+    if state == "destroyOnFinish" then
+        if soundExists(soundId) then
+            destroyOnFinish(soundId, data.value)
+        end
+    end
 
     if state == "timestamp" then
         if soundExists(soundId) then

@@ -41,7 +41,18 @@ class SoundPlayer
 	setDynamic(result)   { this.dynamic = result;    }
 	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_];    }
 	setSoundUrl(result)  { this.url = result;        }
-	setLoop(result)      { this.loop = result;       }
+
+	setLoop(result) {
+        if(!this.isYoutube)
+        {
+            if(this.audioPlayer != null){
+                this.audioPlayer.loop(result);
+            }
+        }
+	    this.loop = result;
+	}
+
+
 	setMaxVolume(result) { this.max_volume = result; }
 	setVolume(result)    
 	{
@@ -112,9 +123,6 @@ class SoundPlayer
                     'onStateChange': function(event){
                         if (event.data == YT.PlayerState.ENDED) {
                             isLooped(event.target.getIframe().id);
-                        }
-
-                        if (event.data == YT.PlayerState.ENDED) {
                             ended(event.target.getIframe().id);
                         }
                     }

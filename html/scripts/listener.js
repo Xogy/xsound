@@ -119,6 +119,32 @@ $(function(){
                     sound.delete();
                 }
                 break;
+            case "repeat":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setTimeStamp(0);
+                    sound.play();
+                }
+                break;
+            case "changeurl":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.destroyYoutubeApi();
+                    sound.delete();
+                    sound.setSoundUrl(item.url);
+                    sound.create();
+                    sound.play();
+                }
+                break;
+            case "loop":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setLoop(item.loop);
+                }
+                break;
 		}
     })
 });  	

@@ -101,3 +101,43 @@ function setTimeStamp(name_, timestamp)
 end
 
 exports('setTimeStamp', setTimeStamp)
+
+function destroyOnFinish(id, bool)
+    soundInfo[id].destroyOnFinish = bool
+end
+
+exports('destroyOnFinish', destroyOnFinish)
+
+function setSoundLoop(name, value)
+    SendNUIMessage({
+        status = "loop",
+        name = name,
+        loop = value,
+    })
+    soundInfo[name].loop = value
+end
+
+exports('setSoundLoop', setSoundLoop)
+
+function repeatSound(name)
+    if soundExists(name) then
+        SendNUIMessage({
+            status = "repeat",
+            name = name,
+        })
+    end
+end
+
+exports('repeatSound', repeatSound)
+
+function setSoundURL(name, url)
+    if soundExists(name) then
+        SendNUIMessage({
+            status = "changeurl",
+            name = name,
+            url = url,
+        })
+    end
+end
+
+exports('setSoundURL', setSoundURL)

@@ -73,9 +73,7 @@ function isLooped(divId){
 	{
 		var sound = soundList[soundName];
         if(sound.getDivId() === divId && sound.isLoop() == true){
-            sound.destroyYoutubeApi();
-            sound.delete();
-            sound.create();
+            sound.setTimeStamp(0);
             sound.play();
             break;
         }
@@ -106,7 +104,6 @@ function ended(divId){
     	{
             var sound = soundList[soundName];
             if(sound.getDivId() === divId && sound.isLoop() == false){
-                sound.destroyYoutubeApi();
                 $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
                 $.post('http://xsound/events', JSON.stringify(
                 {

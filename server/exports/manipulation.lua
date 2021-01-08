@@ -57,3 +57,12 @@ function setTimeStamp(source, name_, time_)
 end
 
 exports('setTimeStamp', setTimeStamp)
+
+function destroyOnFinish(id, bool)
+    TriggerClientEvent("xsound:stateSound", source, "destroyOnFinish", {
+        soundId = id,
+        value = bool
+    })
+end
+
+exports('destroyOnFinish', destroyOnFinish)

@@ -57,6 +57,12 @@ https://github.com/plunkettscott/interact-sound<br>
    
    - setTimeStamp(name, time) will set a new timestamp.
    
+   - setSoundURL(name, url) will set new URL to sound (will play whenever changed)
+   
+   - repeatSound(name) will play again the saved sound
+   
+   - destroyOnFinish(name, bool) true = destroy on end / false = do not destroy on end
+   
 ------------
    
 ### Effects on sound
@@ -113,26 +119,27 @@ https://github.com/plunkettscott/interact-sound<br>
    
    - getLink(name) <br>Will return url link 
    
-   - getInfo(name) <br>Will return an array with info of song...
-   
    - isPlayerInStreamerMode() <br>will return if player got streamer mode enabled. 
    
    - getAllAudioInfo() <br>Will return array of all sound
    
    - isPlayerCloseToAnySound() <br>will return true if player is close to any sound.
+   
+   - getInfo(name) <br>Will return an array with info of the sound...
 ```LUA
 {
-volume,      -- value from 0.0 to 1.0
-url ,        -- sound url
-id,          -- id 
-position,    -- will be nil if position isnt set.
-distance,    -- distance in integer
-playing,     -- true/false
-paused,      -- true/false
-loop,        -- true/false
-isDynamic,   -- true/false
-timeStamp,   -- returns current timestamp
-maxDuration, -- returns max duration of sound
+volume,          -- value from 0.0 to 1.0
+url ,            -- sound url
+id,              -- id 
+position,        -- will be nil if position isnt set.
+distance,        -- distance in integer
+playing,         -- true/false
+paused,          -- true/false
+loop,            -- true/false
+isDynamic,       -- true/false
+timeStamp,       -- returns current timestamp
+maxDuration,     -- returns max duration of sound
+destroyOnFinish, -- default value is true means after its finish it will destroy it self
 }
 ```
 ------------
