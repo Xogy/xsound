@@ -63,6 +63,8 @@ https://github.com/plunkettscott/interact-sound<br>
    
    - destroyOnFinish(name, bool) true = destroy on end / false = do not destroy on end
    
+   - setSoundLoop(name, bool) will set a new value to loop
+   
 ------------
    
 ### Effects on sound
