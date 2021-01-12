@@ -143,6 +143,15 @@ class SoundPlayer
         }
     }
 
+	delete()
+	{
+	    if(this.audioPlayer != null){
+            this.audioPlayer.pause();
+            this.audioPlayer = null;
+	    }
+	    $("#" + this.div_id).remove();
+	}
+
 	updateVolume(dd,maxd) 
 	{
         var d_max = maxd;
@@ -206,15 +215,6 @@ class SoundPlayer
         {
             if(this.youtubeIsReady) this.yPlayer.playVideo();
         }
-	}
-
-	delete()
-	{
-	    if(this.audioPlayer != null){
-            this.audioPlayer.pause();
-            this.audioPlayer = null;
-	    }
-	    $("#" + this.div_id).remove();
 	}
 	
 	mute  ()

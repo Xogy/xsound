@@ -52,16 +52,17 @@ $(function(){
                     sd.play();
                     soundList[item.name] = sd;
                     }else{
-                    $.post('http://xsound/events', JSON.stringify({ type: "onEnd", id: item.name}));
-                    sound.setName(item.name);
-                    sound.setLocation(item.x,item.y,item.z);
-                    sound.setSoundUrl(item.url);
-                    sound.setLoop(item.loop);
                     sound.destroyYoutubeApi();
                     sound.delete();
-                    sound.create();
+
+                    sound.setName(item.name);
+                    sound.setLocation(item.x,item.y,item.z);
+                    sound.setLoop(item.loop);
+                    sound.setSoundUrl(item.url);
                     sound.setMaxVolume(item.volume);
                     sound.setVolume(item.volume);
+                    sound.create();
+
                     sound.play();
                 }
                 break;
