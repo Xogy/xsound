@@ -1,7 +1,4 @@
 if config.AddonList.crewPhone then
-    ESX = nil
-    TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-
     RegisterServerEvent('muzik-cal')
     AddEventHandler('muzik-cal', function(pos, muzikAdi, link, serverId, mp3)
         TriggerClientEvent("client-muzik-cal", -1, pos, muzikAdi, link, serverId, mp3)
