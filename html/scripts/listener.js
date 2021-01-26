@@ -55,6 +55,7 @@ $(function(){
                     sound.destroyYoutubeApi();
                     sound.delete();
 
+                    sound.setLoaded(false);
                     sound.setName(item.name);
                     sound.setLocation(item.x,item.y,item.z);
                     sound.setLoop(item.loop);
