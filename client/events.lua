@@ -30,7 +30,7 @@ RegisterNUICallback("events", function(data)
         if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayEnd ~= nil then
             globalOptionsCache[id].onPlayEnd(getInfo(id))
         end
-        if soundInfo[id].destroyOnFinish then
+        if soundInfo[id].destroyOnFinish and not soundInfo[id].loop then
             Destroy(id)
         end
     end
