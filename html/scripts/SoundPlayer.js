@@ -73,7 +73,7 @@ class SoundPlayer
   
 	create()
 	{
-	    $.post('http://xsound/events', JSON.stringify(
+	    $.post('https://xsound/events', JSON.stringify(
 	    {
             type: "onLoading",
             id: this.getName(),
@@ -85,7 +85,7 @@ class SoundPlayer
 
             this.audioPlayer = new Howl({
                 src: [this.getUrlSound()],
-                loop: this.isLoop(),
+                loop: false,
                 html5: true,
                 volume: 0.0,
                 format: ['mp3'],

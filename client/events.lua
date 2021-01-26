@@ -1,7 +1,9 @@
 RegisterNUICallback("data_status", function(data)
     if soundInfo[data.id] ~= nil then
         if data.type == "finished" then
-            soundInfo[data.id].playing = false
+            if not soundInfo[data.id].loop then
+                soundInfo[data.id].playing = false
+            end
             TriggerEvent("xSound:songStopPlaying", data.id)
         end
         if data.type == "maxDuration" then
@@ -29,6 +31,9 @@ RegisterNUICallback("events", function(data)
     if type == "onEnd" then
         if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayEnd ~= nil then
             globalOptionsCache[id].onPlayEnd(getInfo(id))
+        end
+        if soundInfo[id].loop then
+            soundInfo[id].timeStamp = 0
         end
         if soundInfo[id].destroyOnFinish and not soundInfo[id].loop then
             Destroy(id)
