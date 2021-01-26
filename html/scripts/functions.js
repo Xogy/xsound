@@ -26,8 +26,9 @@ function isReady(divId, howler){
                     id: sound.getName(),
                 }));
 
-                var time = 3;
+                var time = 0;
                 if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
+                if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
 
                 $.post('http://xsound/data_status', JSON.stringify(
                 {
@@ -35,7 +36,6 @@ function isReady(divId, howler){
                     type: "maxDuration",
                     id: sound.getName(),
                 }));
-                sound._duration
                 break;
             }
         }
@@ -51,9 +51,13 @@ function isReady(divId, howler){
                 id: sound.getName(),
             }));
 
+            var time = 0;
+            if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
+            if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
+
             $.post('http://xsound/data_status', JSON.stringify(
             {
-                time: sound.getYoutubePlayer().getDuration(),
+                time: time,
                 type: "maxDuration",
                 id: sound.getName(),
             }));
@@ -72,9 +76,26 @@ function isLooped(divId){
 	for (var soundName in soundList)
 	{
 		var sound = soundList[soundName];
-        if(sound.getDivId() === divId && sound.isLoop() == true){
+        if(sound.getDivId() === divId && sound.isLoop()){
             sound.setTimeStamp(0);
             sound.play();
+
+            $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
+            $.post('http://xsound/events', JSON.stringify(
+            {
+                type: "onEnd",
+                id: sound.getName(),
+            }));
+
+            var time = 0;
+            if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
+            if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
+            $.post('http://xsound/events', JSON.stringify(
+            {
+                type: "resetTimeStamp",
+                id: sound.getName(),
+                time: time,
+            }));
             break;
         }
     }
@@ -86,7 +107,7 @@ function ended(divId){
     	for (var soundName in soundList)
     	{
             var sound = soundList[soundName];
-            if(!sound.isPlaying() && sound.isLoop() == false)
+            if(!sound.isPlaying())
             {
                 $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
                 $.post('http://xsound/events', JSON.stringify(
@@ -94,6 +115,17 @@ function ended(divId){
                     type: "onEnd",
                     id: sound.getName(),
                 }));
+                if(sound.isLoop()){
+                    var time = 0;
+                    if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
+                    if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
+                    $.post('http://xsound/events', JSON.stringify(
+                    {
+                        type: "resetTimeStamp",
+                        id: sound.getName(),
+                        time: time,
+                    }));
+                }
                 break;
             }
     	}
@@ -103,7 +135,7 @@ function ended(divId){
     	for (var soundName in soundList)
     	{
             var sound = soundList[soundName];
-            if(sound.getDivId() === divId && sound.isLoop() == false){
+            if(sound.getDivId() === divId && !sound.isLoop()){
                 $.post('http://xsound/data_status', JSON.stringify({ type: "finished",id: soundName }));
                 $.post('http://xsound/events', JSON.stringify(
                 {

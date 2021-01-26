@@ -147,8 +147,8 @@ class SoundPlayer
 	{
 	    if(this.audioPlayer != null){
             this.audioPlayer.pause();
-            this.audioPlayer = null;
 	    }
+	    this.audioPlayer = null;
 	    $("#" + this.div_id).remove();
 	}
 

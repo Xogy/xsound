@@ -135,7 +135,9 @@ $(function(){
                     sound.destroyYoutubeApi();
                     sound.delete();
                     sound.setSoundUrl(item.url);
+                    sound.setLoaded(false);
                     sound.create();
+
                     sound.play();
                 }
                 break;

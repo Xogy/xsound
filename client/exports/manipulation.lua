@@ -132,6 +132,7 @@ exports('repeatSound', repeatSound)
 
 function setSoundURL(name, url)
     if soundExists(name) then
+        soundInfo[name].url = url
         SendNUIMessage({
             status = "changeurl",
             name = name,
