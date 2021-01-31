@@ -129,6 +129,14 @@ $(function(){
                     sound.play();
                 }
                 break;
+            case "changedynamic":
+                var sound = soundList[item.name];
+                if(sound != null)
+                {
+                    sound.setDynamic(item.bool);
+                    sound.setVolume(sound.getMaxVolume());
+                }
+                break;
             case "changeurl":
                 var sound = soundList[item.name];
                 if(sound != null)
@@ -180,7 +188,7 @@ function addToCache()
 			}
 			else
 			{
-			    sound.mute();
+			    if(!sound.isMuted()) sound.mute();
 			}
 		}
 	}

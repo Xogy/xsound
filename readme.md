@@ -65,6 +65,8 @@ https://github.com/plunkettscott/interact-sound<br>
    
    - setSoundLoop(name, bool) will set a new value to loop
    
+   - setSoundDynamic(name, bool)  will set if the sound is 3D / 3D = true
+   
 ------------
    
 ### Effects on sound

@@ -15,6 +15,7 @@ class SoundPlayer
 		this.loop = false;
 		this.isYoutube = false;
 		this.load = false;
+		this.isMuted_ = false;
 		this.audioPlayer = null;
 	}
 
@@ -22,15 +23,16 @@ class SoundPlayer
 	    this.youtubeIsReady = result;
 	}
 
-	getDistance(){ return this.distance;}
-	getLocation(){ return this.pos;     }
-	getVolume  (){ return this.volume;  }
-	getUrlSound(){ return this.url;     }
-	isDynamic()  { return this.dynamic; }
-	getDivId()   { return this.div_id;  }
-	isLoop()     { return this.loop;    }
-	getName()    { return this.name;    }
-	loaded()     { return this.load;    }
+	getDistance() { return this.distance;}
+	getLocation() { return this.pos;     }
+	getVolume()   { return this.volume;  }
+	getMaxVolume(){ return this.max_volume;  }
+	getUrlSound() { return this.url;     }
+	isDynamic()   { return this.dynamic; }
+	getDivId()    { return this.div_id;  }
+	isLoop()      { return this.loop;    }
+	getName()     { return this.name;    }
+	loaded()      { return this.load;    }
 
 	getAudioPlayer()    { return this.audioPlayer; }
 	getYoutubePlayer()  { return this.yPlayer;     }
@@ -73,7 +75,7 @@ class SoundPlayer
   
 	create()
 	{
-	    $.post('https://xsound/events', JSON.stringify(
+	    $.post('http://xsound/events', JSON.stringify(
 	    {
             type: "onLoading",
             id: this.getName(),
@@ -167,8 +169,13 @@ class SoundPlayer
             var far_away = 100 - distance;
             vol = (this.max_volume / 100) * far_away;;
 			this.setVolume(vol);
+			this.isMuted_ = false;
         }
-        else this.setVolume(0);
+        else
+        {
+            this.setVolume(0);
+            this.isMuted_ = true;
+        }
 	}
 
 	play() 
@@ -216,8 +223,13 @@ class SoundPlayer
             if(this.youtubeIsReady) this.yPlayer.playVideo();
         }
 	}
-	
-	mute  ()
+
+	isMuted()
+	{
+        return this.isMuted_;
+	}
+
+	mute()
 	{
         if(!this.isYoutube)
         {
@@ -227,7 +239,9 @@ class SoundPlayer
         {
             if(this.youtubeIsReady) this.yPlayer.setVolume(0);
         }
+        this.isMuted_ = true;
 	}
+
 	unmute()
 	{
         if(!this.isYoutube)
@@ -238,6 +252,7 @@ class SoundPlayer
         {
             if(this.youtubeIsReady) this.yPlayer.setVolume( this.getVolume() * 100);
         }
+        this.isMuted_ = false;
 	}
 
 	setTimeStamp(time)

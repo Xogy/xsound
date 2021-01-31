@@ -130,6 +130,19 @@ end
 
 exports('repeatSound', repeatSound)
 
+function setSoundDynamic(name, bool)
+    if soundExists(name) then
+        soundInfo[name].isDynamic = bool
+        SendNUIMessage({
+            status = "changedynamic",
+            name = name,
+            bool = bool,
+        })
+    end
+end
+
+exports('setSoundDynamic', setSoundDynamic)
+
 function setSoundURL(name, url)
     if soundExists(name) then
         soundInfo[name].url = url
