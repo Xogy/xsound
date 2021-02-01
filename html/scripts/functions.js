@@ -19,6 +19,7 @@ function isReady(divId, howler){
         {
             var sound = soundList[soundName];
             if(sound.loaded() == false){
+
                 sound.setLoaded(true);
                 $.post('http://xsound/events', JSON.stringify(
                 {
@@ -28,7 +29,7 @@ function isReady(divId, howler){
 
                 var time = 0;
                 if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
-                if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
+                if(sound.isDynamic()) sound.setVolume(0);
 
                 $.post('http://xsound/data_status', JSON.stringify(
                 {
@@ -52,7 +53,6 @@ function isReady(divId, howler){
             }));
 
             var time = 0;
-            if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
             if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
 
             $.post('http://xsound/data_status', JSON.stringify(
@@ -64,9 +64,6 @@ function isReady(divId, howler){
 
             sound.isYoutubeReady(true);
             if(!sound.isDynamic()) sound.setVolume(sound.getVolume())
-            if(sound.isDynamic()){
-                updateVolumeSounds();
-            }
             break;
         }
 	}

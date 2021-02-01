@@ -89,6 +89,7 @@ class SoundPlayer
                 src: [this.getUrlSound()],
                 loop: false,
                 html5: true,
+                autoplay: false,
                 volume: 0.0,
                 format: ['mp3'],
                 onend: function(event){
@@ -118,7 +119,7 @@ class SoundPlayer
                 height: "0",
                 events: {
                     'onReady': function(event){
-                        updateVolumeSounds();
+                        event.target.setVolume(0);
                         event.target.playVideo();
                         isReady(event.target.getIframe().id);
                     },
@@ -183,19 +184,12 @@ class SoundPlayer
         if(!this.isYoutube)
         {
             if(this.audioPlayer != null){
-                this.audioPlayer.volume(this.getVolume());
-                if(this.isDynamic()){
-                    updateVolumeSounds();
-                }
                 this.audioPlayer.play();
             }
         }
         else
         {
             if(this.youtubeIsReady){
-                if(this.isDynamic()){
-                    updateVolumeSounds();
-                }
                 this.yPlayer.playVideo();
             }
         }
@@ -269,10 +263,7 @@ class SoundPlayer
 
 	isPlaying()
 	{
-        if(!this.isYoutube)
-        {
-            return this.audioPlayer != null  && this.audioPlayer.playing();
-        }
-        return false;
+        if(this.isYoutube) return this.youtubeIsReady && this.yPlayer.getPlayerState() == 1;
+        else return this.audioPlayer != null  && this.audioPlayer.playing();
 	}
 }

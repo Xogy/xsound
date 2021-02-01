@@ -188,7 +188,7 @@ function addToCache()
 			}
 			else
 			{
-			    if(!sound.isMuted()) sound.mute();
+                if(!sound.isMuted()) sound.mute();
 			}
 		}
 	}
