@@ -54,6 +54,7 @@ function isReady(divId, howler){
 
             var time = 0;
             if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
+            sound.setLoaded(true);
 
             $.post('http://xsound/data_status', JSON.stringify(
             {
