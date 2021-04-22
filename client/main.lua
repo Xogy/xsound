@@ -36,7 +36,8 @@ CreateThread(function()
                 z = pos.z
             })
         else
-            Wait(500)
+            SendNUIMessage({ status = "position", x = -900000, y = -900000, z = -900000 })
+            Wait(1000)
         end
     end
 end)
@@ -46,7 +47,7 @@ CreateThread(function()
     local ped = PlayerPedId()
     local playerPos = GetEntityCoords(ped)
     while true do
-        Wait(200)
+        Wait(500)
         ped = PlayerPedId()
         playerPos = GetEntityCoords(ped)
         isPlayerCloseToMusic = false

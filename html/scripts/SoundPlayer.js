@@ -61,21 +61,32 @@ class SoundPlayer
 		this.volume = result;
 		if(this.max_volume == -1) this.max_volume = result; 
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
-        if(!this.isYoutube)
-        {
-            if(this.audioPlayer != null) this.audioPlayer.volume(result);
-        }
-        else
-        {
-            if(this.yPlayer && this.youtubeIsReady){
-                this.yPlayer.setVolume(result * 100);
-            }
-        }
+		if(this.isMuted_){
+			if(!this.isYoutube)
+			{
+				if(this.audioPlayer != null) this.audioPlayer.volume(0);
+			}
+			else
+			{
+				if(this.yPlayer && this.youtubeIsReady){this.yPlayer.setVolume(0);}
+			}			
+		}
+		else
+		{
+			if(!this.isYoutube)
+			{
+				if(this.audioPlayer != null) this.audioPlayer.volume(result);
+			}
+			else
+			{
+				if(this.yPlayer && this.youtubeIsReady){this.yPlayer.setVolume(result * 100);}
+			}
+		}
 	}
   
 	create()
 	{
-	    $.post('http://xsound/events', JSON.stringify(
+	    $.post('https://xsound/events', JSON.stringify(
 	    {
             type: "onLoading",
             id: this.getName(),
@@ -90,7 +101,7 @@ class SoundPlayer
                 loop: false,
                 html5: true,
                 autoplay: false,
-                volume: 0.0,
+                volume: 0.00,
                 format: ['mp3'],
                 onend: function(event){
                     ended(null);

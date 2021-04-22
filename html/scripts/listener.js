@@ -188,7 +188,7 @@ function addToCache()
 			}
 			else
 			{
-                if(!sound.isMuted() && sound.loaded()) {
+                if(sound.loaded()) {
                     sound.mute();
                 }
 			}
