@@ -24,6 +24,7 @@ CreateThread(function()
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
+    local changedPosition = false
     while true do
         Wait(refresh)
         if not disableMusic and isPlayerCloseToMusic then
@@ -35,8 +36,20 @@ CreateThread(function()
                 y = pos.y,
                 z = pos.z
             })
+
+            if changedPosition then
+                SendNUIMessage({ status = "unmuteAll" })
+            end
+            changedPosition = false
         else
-            SendNUIMessage({ status = "position", x = -900000, y = -900000, z = -900000 })
+            if not changedPosition then
+                changedPosition = true
+                SendNUIMessage({ status = "position", x = -900000, y = -900000, z = -900000 })
+
+                if config.muteMusicTestFeature then
+                    SendNUIMessage({ status = "muteAll" })
+                end
+            end
             Wait(1000)
         end
     end

@@ -25,3 +25,7 @@ config.Messages = {
 config.AddonList = {
     crewPhone = false,
 }
+
+-- Can hear sometimes music even if you're not around?
+-- Try enable this testing feature that might solve the problem.
+config.muteMusicTestFeature = false

@@ -52,10 +52,8 @@ $(function(){
                     sd.play();
                     soundList[item.name] = sd;
                     }else{
-                    sound.destroyYoutubeApi();
-                    sound.delete();
+                    sound.setTimeStamp(0);
 
-                    sound.setLoaded(false);
                     sound.setName(item.name);
                     sound.setLocation(item.x,item.y,item.z);
                     sound.setLoop(item.loop);
@@ -155,6 +153,21 @@ $(function(){
                 if(sound != null)
                 {
                     sound.setLoop(item.loop);
+                }
+                break;
+            case "unmuteAll":
+                for (var soundName in soundList)
+                {
+                    sound = soundList[soundName];
+                    sound.unmuteSilent();
+                }
+                updateVolumeSounds();
+                break;
+            case "muteAll":
+                for (var soundName in soundList)
+                {
+                    sound = soundList[soundName];
+                    sound.mute();
                 }
                 break;
 		}

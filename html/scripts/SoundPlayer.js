@@ -161,6 +161,8 @@ class SoundPlayer
 	{
 	    if(this.audioPlayer != null){
             this.audioPlayer.pause();
+            this.audioPlayer.stop();
+            this.audioPlayer.unload();
 	    }
 	    this.audioPlayer = null;
 	    $("#" + this.div_id).remove();
@@ -257,6 +259,11 @@ class SoundPlayer
         {
             if(this.youtubeIsReady) this.yPlayer.setVolume( this.getVolume() * 100);
         }
+        this.isMuted_ = false;
+	}
+
+	unmuteSilent()
+	{
         this.isMuted_ = false;
 	}
 

@@ -24,24 +24,32 @@ RegisterNUICallback("events", function(data)
         end
     end
     if type == "onPlay" then
-        if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayStart ~= nil then
-            globalOptionsCache[id].onPlayStart(getInfo(id))
+        if globalOptionsCache[id] then
+            if globalOptionsCache[id].onPlayStart then
+                globalOptionsCache[id].onPlayStart(getInfo(id))
+            end
         end
     end
     if type == "onEnd" then
-        if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onPlayEnd ~= nil then
-            globalOptionsCache[id].onPlayEnd(getInfo(id))
+        if globalOptionsCache[id] then
+            if globalOptionsCache[id].onPlayEnd then
+                globalOptionsCache[id].onPlayEnd(getInfo(id))
+            end
         end
-        if soundInfo[id].loop then
-            soundInfo[id].timeStamp = 0
-        end
-        if soundInfo[id].destroyOnFinish and not soundInfo[id].loop then
-            Destroy(id)
+        if soundInfo[id] then
+            if soundInfo[id].loop then
+                soundInfo[id].timeStamp = 0
+            end
+            if soundInfo[id].destroyOnFinish and not soundInfo[id].loop then
+                Destroy(id)
+            end
         end
     end
     if type == "onLoading" then
-        if globalOptionsCache[id] ~= nil and globalOptionsCache[id].onLoading ~= nil then
-            globalOptionsCache[id].onLoading(getInfo(id))
+        if globalOptionsCache[id] then
+            if globalOptionsCache[id].onLoading then
+                globalOptionsCache[id].onLoading(getInfo(id))
+            end
         end
     end
 end)
