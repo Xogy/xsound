@@ -39,31 +39,23 @@ $(function(){
             case "url":
                 var sound = soundList[item.name];
 
-                if(sound == null)
+                if(sound != null)
                 {
-                    var sd = new SoundPlayer();
-                    sd.setName(item.name);
-                    sd.setSoundUrl(item.url);
-                    sd.setDynamic(item.dynamic);
-                    sd.setLocation(item.x,item.y,item.z);
-                    sd.setLoop(item.loop)
-                    sd.create();
-                    sd.setVolume(item.volume);
-                    sd.play();
-                    soundList[item.name] = sd;
-                    }else{
-                    sound.setTimeStamp(0);
-
-                    sound.setName(item.name);
-                    sound.setLocation(item.x,item.y,item.z);
-                    sound.setLoop(item.loop);
-                    sound.setSoundUrl(item.url);
-                    sound.setMaxVolume(item.volume);
-                    sound.setVolume(item.volume);
-                    sound.create();
-
-                    sound.play();
+                    sound.destroyYoutubeApi();
+                    sound.delete();
+                    sound = null;
                 }
+
+                var sd = new SoundPlayer();
+                sd.setName(item.name);
+                sd.setSoundUrl(item.url);
+                sd.setDynamic(item.dynamic);
+                sd.setLocation(item.x,item.y,item.z);
+                sd.setLoop(item.loop)
+                sd.create();
+                sd.setVolume(item.volume);
+                sd.play();
+                soundList[item.name] = sd;
                 break;
 
             case "distance":
