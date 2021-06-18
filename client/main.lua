@@ -45,11 +45,9 @@ CreateThread(function()
             if not changedPosition then
                 changedPosition = true
                 SendNUIMessage({ status = "position", x = -900000, y = -900000, z = -900000 })
-
-                if config.muteMusicTestFeature then
-                    SendNUIMessage({ status = "muteAll" })
-                end
             end
+			
+			SendNUIMessage({ status = "muteAll" })			
             Wait(1000)
         end
     end
