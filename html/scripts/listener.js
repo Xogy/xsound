@@ -123,6 +123,7 @@ $(function(){
                 var sound = soundList[item.name];
                 if(sound != null)
                 {
+                    sound.unmute()
                     sound.setDynamic(item.bool);
                     sound.setVolume(sound.getMaxVolume());
                 }
@@ -151,7 +152,9 @@ $(function(){
                 for (var soundName in soundList)
                 {
                     sound = soundList[soundName];
-                    sound.unmuteSilent();
+                    if(sound.isDynamic()){
+                        sound.unmuteSilent();
+                    }
                 }
                 updateVolumeSounds();
                 break;
@@ -159,7 +162,9 @@ $(function(){
                 for (var soundName in soundList)
                 {
                     sound = soundList[soundName];
-                    sound.mute();
+                    if(sound.isDynamic()){
+                        sound.mute();
+                    }
                 }
                 break;
 		}
