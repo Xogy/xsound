@@ -25,3 +25,10 @@ config.Messages = {
 config.AddonList = {
     crewPhone = false,
 }
+
+props = { -- prop for player
+    'prop_boombox_01',
+    'prop_speaker_06',
+    'bkr_prop_clubhouse_jukebox_01a',
+    'bkr_prop_clubhouse_jukebox_02a',
+}

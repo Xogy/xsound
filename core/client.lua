@@ -183,12 +183,6 @@ LoadModel = function(model)
 	end
 end
 
-local props = {
-    'prop_speaker_06',
-    'bkr_prop_clubhouse_jukebox_01a',
-    'bkr_prop_clubhouse_jukebox_02a',
-}
-
 function spawnspeaker()
     local nearspeaker = false
     for k,v in pairs(props) do
