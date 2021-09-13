@@ -8,6 +8,7 @@
 - Volume Adjustable
 - UI Bar (minimize Now Playing) 
 - Prop Base
+- Standalone
 
 # Usage
 ```
