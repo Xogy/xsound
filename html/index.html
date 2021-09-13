@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<title>Renzu Mp3</title>
+		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+		<link rel="stylesheet" href="style.css" type="text/css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://s.ytimg.com/yts/jsbin/www-widgetapi-vflJJaNgk/www-widgetapi.js"></script>
+		<script src="https://www.youtube.com/iframe_api"></script>
+	</head>
+	<body id="body" style = "display:none;    overflow: hidden;">
+		<div id="player"></div>
+		<div class="container">
+			<header style="z-index:9999;">
+			  <div class="playlist" id="hide" style="z-index:9999;margin-left:-20px;">
+				<i class="fas fa-expand-arrows-alt" style="color:cyan;"></i>
+			  </div>
+			</header>
+			<main id="main">
+			  <div class="album-art">
+				<img id="thumb" src="https://i.imgur.com/MfvngmV.png" alt="" />
+			  </div>
+			  <div class="player">
+				<i class="fa fa-repeat"></i>
+				<i class="fa fas fa-volume-down" id="minus"></i>
+				<i class="fa fa-play" id="play"></i>
+				<i class="fa fa-pause" id="pause"></i>
+				<i class="fa fas fa-volume-up" id="plus"></i>
+				<i class="fa fa-random"></i>
+			  </div>
+			</main>
+			<footer id="footer">
+			  <div class="title" id="playing" style="height:10px;overflow:hidden;">Nothing
+			  </div>
+			  <div class="time-tracker">
+				<div class="timer">
+				  	<div class="loading-bar">
+						<div class="progress-bar" style="width:30%;" id="percentage"></div>
+					</div>
+				</div>
+				<div class="time" id="duration">00:00</div>
+			  </div>
+			  	<div id="input" style="    float: left;
+				  position: absolute;
+				  left: 40px;
+				  bottom: 20px;
+				  color: #0dfbb9;">
+					Quick Play: <input type="text" id="url" value="https://www.youtube.com/watch?v=_XspQUK22-U">
+				</div>
+			</footer>
+		  </div>
+			<script src="./scripts/config.js" type="text/javascript"></script>
+			<script src="./scripts/functions.js" type="text/javascript"></script>
+			<script src="./scripts/SoundPlayer.js" type="text/javascript"></script>
+			<script src="./scripts/listener.js" type="text/javascript"></script>
+			<script src="./scripts/listener2.js" type="text/javascript"></script>
+	</body>
+</html>
