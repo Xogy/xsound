@@ -59,6 +59,27 @@ end
 
 exports('fadeOut', fadeOut)
 
+function fadeVolume(name, time, volume_)
+    if soundExists(name) then
+        local fadeId = math.random(99999)
+        soundInfo[name].fadeId = fadeId
+        local initVol = soundInfo[name].volume 
+        local toFade = volume_ - initVol 
+        local repeats = time / 25
+        local toChange = toFade / repeats
+
+        for i = 1, repeats do
+            Citizen.Wait(25)
+            if soundInfo[name].fadeId ~= fadeId then
+                return
+            end
+            volumeType(name, initVol + (toChange * i))
+        end
+    end
+end
+
+exports('fadeVolume', fadeVolume)
+
 function volumeType(name, volume)
     if isDynamic(name) then
         setVolumeMax(name,volume)
