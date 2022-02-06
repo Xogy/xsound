@@ -1,5 +1,6 @@
 var soundList = [];
 var closeToPlayer = [];
+var isMutedAll = false;
 
 var playerPos = [-90000,-90000,-90000];
 $(function(){
@@ -149,6 +150,7 @@ $(function(){
                 }
                 break;
             case "unmuteAll":
+                isMutedAll = false;
                 for (var soundName in soundList)
                 {
                     sound = soundList[soundName];
@@ -159,6 +161,7 @@ $(function(){
                 updateVolumeSounds();
                 break;
             case "muteAll":
+                isMutedAll = true;
                 for (var soundName in soundList)
                 {
                     sound = soundList[soundName];
@@ -184,25 +187,27 @@ function Between(loc1,loc2)
 function addToCache()
 {
     closeToPlayer = [];
-    var sound = null;
-	for (var soundName in soundList)
-	{
-		sound = soundList[soundName];
-		if(sound.isDynamic())
-		{
-			var distance = Between(playerPos,sound.getLocation());
-			var distance_max = sound.getDistance();
-			if(distance < distance_max + 40)
-			{
-                closeToPlayer[soundName] = soundName;
-			}
-			else
-			{
-                if(sound.loaded()) {
-                    sound.mute();
+    if(isMutedAll == false){
+        var sound = null;
+        for (var soundName in soundList)
+        {
+            sound = soundList[soundName];
+            if(sound.isDynamic())
+            {
+                var distance = Between(playerPos,sound.getLocation());
+                var distance_max = sound.getDistance();
+                if(distance < distance_max + 40)
+                {
+                    closeToPlayer[soundName] = soundName;
                 }
-			}
-		}
+                else
+                {
+                    if(sound.loaded()) {
+                        sound.mute();
+                    }
+                }
+            }
+        }
 	}
 }
 
@@ -210,20 +215,22 @@ setInterval(addToCache, 1000);
 
 function updateVolumeSounds()
 {
-    var sound = null;
-    for (var name in closeToPlayer)
-    {
-        sound = soundList[name];
-        if(sound.isDynamic())
+    if(isMutedAll == false){
+        var sound = null;
+        for (var name in closeToPlayer)
         {
-            var distance = Between(playerPos,sound.getLocation());
-            var distance_max = sound.getDistance();
-            if(distance < distance_max)
+            sound = soundList[name];
+            if(sound.isDynamic())
             {
-                sound.updateVolume(distance,distance_max);
-                continue;
+                var distance = Between(playerPos,sound.getLocation());
+                var distance_max = sound.getDistance();
+                if(distance < distance_max)
+                {
+                    sound.updateVolume(distance,distance_max);
+                    continue;
+                }
+                sound.mute();
             }
-            sound.mute();
         }
     }
 }
