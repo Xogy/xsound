@@ -46,7 +46,7 @@ CreateThread(function()
                 changedPosition = true
                 SendNUIMessage({ status = "position", x = -900000, y = -900000, z = -900000 })
             end
-			
+
 			SendNUIMessage({ status = "muteAll" })			
             Wait(1000)
         end

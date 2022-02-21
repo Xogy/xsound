@@ -61,25 +61,33 @@ class SoundPlayer
 		this.volume = result;
 		if(this.max_volume == -1) this.max_volume = result; 
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
-		if(this.isMuted_){
+		if(this.isMuted_ || isMutedAll){
 			if(!this.isYoutube)
 			{
-				if(this.audioPlayer != null) this.audioPlayer.volume(0);
+				if(this.audioPlayer != null) {
+				    this.audioPlayer.volume(0);
+				}
 			}
 			else
 			{
-				if(this.yPlayer && this.youtubeIsReady){this.yPlayer.setVolume(0);}
+				if(this.yPlayer && this.youtubeIsReady){
+				    this.yPlayer.setVolume(0);
+				}
 			}			
 		}
 		else
 		{
 			if(!this.isYoutube)
 			{
-				if(this.audioPlayer != null) this.audioPlayer.volume(result);
+				if(this.audioPlayer != null){
+				    this.audioPlayer.volume(result);
+				}
 			}
 			else
 			{
-				if(this.yPlayer && this.youtubeIsReady){this.yPlayer.setVolume(result * 100);}
+				if(this.yPlayer && this.youtubeIsReady){
+				    this.yPlayer.setVolume(result * 100);
+				}
 			}
 		}
 	}
@@ -238,28 +246,14 @@ class SoundPlayer
 
 	mute()
 	{
-        if(!this.isYoutube)
-        {
-            if(this.audioPlayer != null) this.audioPlayer.volume(0);
-        }
-        else
-        {
-            if(this.youtubeIsReady) this.yPlayer.setVolume(0);
-        }
         this.isMuted_ = true;
+        this.setVolume(0)
 	}
 
 	unmute()
 	{
-        if(!this.isYoutube)
-        {
-            if(this.audioPlayer != null) this.audioPlayer.volume(this.getVolume());
-        }
-        else
-        {
-            if(this.youtubeIsReady) this.yPlayer.setVolume( this.getVolume() * 100);
-        }
         this.isMuted_ = false;
+        this.setVolume(this.getVolume())
 	}
 
 	unmuteSilent()

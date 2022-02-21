@@ -187,7 +187,7 @@ function Between(loc1,loc2)
 function addToCache()
 {
     closeToPlayer = [];
-    if(isMutedAll == false){
+    if(!isMutedAll){
         var sound = null;
         for (var soundName in soundList)
         {
@@ -215,7 +215,7 @@ setInterval(addToCache, 1000);
 
 function updateVolumeSounds()
 {
-    if(isMutedAll == false){
+    if(!isMutedAll){
         var sound = null;
         for (var name in closeToPlayer)
         {
