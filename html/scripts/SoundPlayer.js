@@ -143,6 +143,7 @@ class SoundPlayer
                         isReady(event.target.getIframe().id);
                     },
                     'onStateChange': function(event){
+                        event.target.unMute();
                         if (event.data == YT.PlayerState.ENDED) {
                             isLooped(event.target.getIframe().id);
                             ended(event.target.getIframe().id);
