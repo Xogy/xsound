@@ -144,6 +144,7 @@ class SoundPlayer
                     },
                     'onStateChange': function(event){
                         event.target.unMute();
+                        event.target.setVolume(0);
                         if (event.data == YT.PlayerState.ENDED) {
                             isLooped(event.target.getIframe().id);
                             ended(event.target.getIframe().id);
