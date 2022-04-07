@@ -36,7 +36,31 @@ $(function(){
                     sound.setMaxVolume(item.volume);
                 }
                 break;
+            /*
+            case "textSpeech":
+                var sound = soundList[item.name];
 
+                if(sound != null)
+                {
+                    sound.destroyYoutubeApi();
+                    sound.delete();
+                    sound = null;
+                }
+
+                var sd = new SoundPlayer();
+                sd.IsTextToSpeech(true)
+                sd.setName(item.name);
+                sd.setTextToSpeech(item.text)
+                sd.setTextToSpeechLang(item.lang)
+                sd.setDynamic(item.dynamic);
+                sd.setLocation(item.x,item.y,item.z);
+                sd.create();
+
+                sd.setVolume(item.volume);
+                sd.play();
+                soundList[item.name] = sd;
+                break;
+            */
             case "url":
                 var sound = soundList[item.name];
 

@@ -2,6 +2,7 @@ class SoundPlayer
 {
     static yPlayer = null;
     youtubeIsReady = false;
+
 	constructor()
 	{
 		this.url = "test";
@@ -17,7 +18,29 @@ class SoundPlayer
 		this.load = false;
 		this.isMuted_ = false;
 		this.audioPlayer = null;
+
+		//this.textToSpeech = false;
+        //this.speechSynthMessage = new SpeechSynthesisUtterance();
+		//this.textToRead = "hello you know";
+		//this.textToReadLang = "en-US";
 	}
+
+    /*
+    setTextToSpeechLang(lang){
+        this.textToReadLang = lang;
+    }
+
+    setTextToSpeech(text){
+        this.textToRead = text;
+    }
+
+    IsTextToSpeech(result){
+        if(typeof result !== "undefined"){
+            this.textToSpeech = result
+        }
+        return this.textToSpeech
+    }
+    */
 
 	isYoutubeReady(result){
 	    this.youtubeIsReady = result;
@@ -61,6 +84,14 @@ class SoundPlayer
 		this.volume = result;
 		if(this.max_volume == -1) this.max_volume = result; 
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
+
+        /*
+		if(this.IsTextToSpeech()){
+            this.speechSynthMessage.volume = result;
+		    return;
+		}
+		*/
+
 		if(this.isMuted_ || isMutedAll){
 			if(!this.isYoutube)
 			{
@@ -204,6 +235,15 @@ class SoundPlayer
 
 	play() 
 	{
+	    /*
+        if(this.IsTextToSpeech()){
+            this.speechSynthMessage.lang = this.textToReadLang;
+            this.speechSynthMessage.text = this.textToRead;
+            window.speechSynthesis.speak(this.speechSynthMessage);
+            return;
+        }
+        */
+
         if(!this.isYoutube)
         {
             if(this.audioPlayer != null){
