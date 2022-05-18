@@ -65,7 +65,11 @@ class SoundPlayer
 	setDistance(result)  { this.distance = result;   }
 	setDynamic(result)   { this.dynamic = result;    }
 	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_];    }
-	setSoundUrl(result)  { this.url = result;        }
+
+
+	setSoundUrl(result) {
+	    this.url = result.replace(/<[^>]*>?/gm, '');
+	}
 
 	setLoop(result) {
         if(!this.isYoutube)

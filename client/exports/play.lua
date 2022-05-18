@@ -22,6 +22,12 @@ function PlayUrl(name_, url_, volume_, loop_, options)
     soundInfo[name_].isDynamic = false
 
     globalOptionsCache[name_] = options or { }
+
+    if loop_ then
+        soundInfo[name_].destroyOnFinish = false
+    else
+        soundInfo[name_].destroyOnFinish = true
+    end
 end
 
 exports('PlayUrl', PlayUrl)
@@ -50,6 +56,12 @@ function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
     soundInfo[name_].isDynamic = true
 
     globalOptionsCache[name_] = options or { }
+
+    if loop_ then
+        soundInfo[name_].destroyOnFinish = false
+    else
+        soundInfo[name_].destroyOnFinish = true
+    end
 end
 
 exports('PlayUrlPos', PlayUrlPos)
