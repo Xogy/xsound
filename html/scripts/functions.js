@@ -37,6 +37,9 @@ function isReady(divId, howler){
                     type: "maxDuration",
                     id: sound.getName(),
                 }));
+		    
+		addToCache();
+		updateVolumeSounds();
                 break;
             }
         }
@@ -66,6 +69,8 @@ function isReady(divId, howler){
 
             sound.isYoutubeReady(true);
             if(!sound.isDynamic()) sound.setVolume(sound.getVolume())
+	    addToCache();
+	    updateVolumeSounds();		
             break;
         }
 	}
