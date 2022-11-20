@@ -171,6 +171,9 @@ class SoundPlayer
                 enablejsapi: 1,
                 width: "0",
                 height: "0",
+		playerVars: {
+                  controls: 0,
+                },
                 events: {
                     'onReady': function(event){
                         event.target.setVolume(0);
