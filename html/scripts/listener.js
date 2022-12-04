@@ -134,6 +134,7 @@ $(function(){
                 {
                     sound.destroyYoutubeApi();
                     sound.delete();
+                    delete soundList[item.name];
                 }
                 break;
             case "repeat":
@@ -244,16 +245,18 @@ function updateVolumeSounds()
         for (var name in closeToPlayer)
         {
             sound = soundList[name];
-            if(sound.isDynamic())
-            {
-                var distance = Between(playerPos,sound.getLocation());
-                var distance_max = sound.getDistance();
-                if(distance < distance_max)
+            if(sound != null){
+                if(sound.isDynamic())
                 {
-                    sound.updateVolume(distance,distance_max);
-                    continue;
+                    var distance = Between(playerPos,sound.getLocation());
+                    var distance_max = sound.getDistance();
+                    if(distance < distance_max)
+                    {
+                        sound.updateVolume(distance,distance_max);
+                        continue;
+                    }
+                    sound.mute();
                 }
-                sound.mute();
             }
         }
     }
