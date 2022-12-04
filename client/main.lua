@@ -24,18 +24,24 @@ CreateThread(function()
     local refresh = config.RefreshTime
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
+    local lastPos = pos
     local changedPosition = false
     while true do
         Wait(refresh)
         if not disableMusic and isPlayerCloseToMusic then
             ped = PlayerPedId()
             pos = GetEntityCoords(ped)
-            SendNUIMessage({
-                status = "position",
-                x = pos.x,
-                y = pos.y,
-                z = pos.z
-            })
+
+            -- we will update position only when player have moved from last position he was one
+            if #(lastPos - pos) >= 0.1 then
+                lastPos = pos
+                SendNUIMessage({
+                    status = "position",
+                    x = pos.x,
+                    y = pos.y,
+                    z = pos.z
+                })
+            end
 
             if changedPosition then
                 SendNUIMessage({ status = "unmuteAll" })
@@ -45,9 +51,8 @@ CreateThread(function()
             if not changedPosition then
                 changedPosition = true
                 SendNUIMessage({ status = "position", x = -900000, y = -900000, z = -900000 })
+                SendNUIMessage({ status = "muteAll" })
             end
-
-			SendNUIMessage({ status = "muteAll" })			
             Wait(1000)
         end
     end
@@ -76,6 +81,7 @@ end)
 -- updating timeStamp
 CreateThread(function()
     Wait(1100)
+
     while true do
         Wait(1000)
         for k, v in pairs(soundInfo) do
