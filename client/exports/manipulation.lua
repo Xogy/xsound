@@ -37,6 +37,14 @@ function Destroy(name_)
     globalOptionsCache[name_] = nil
 end
 
+function DestroySilent(name)
+    SendNUIMessage({
+        status = "delete",
+        name = name
+    })
+end
+
+
 exports('Destroy', Destroy)
 
 function Resume(name_)

@@ -1,5 +1,6 @@
-function onPlayStart(name, delegate)
+function onPlayStart(name, delegate, imporant)
     globalOptionsCache[name].onPlayStart = delegate
+    globalOptionsCache[name].imporant = imporant
 end
 
 exports('onPlayStart', onPlayStart)
@@ -27,3 +28,7 @@ function onPlayResume(name, delegate)
 end
 
 exports('onPlayResume', onPlayResume)
+
+function onPlayStartSilent(name, delegate)
+    globalOptionsCache[name].onPlayStartSilent = delegate
+end

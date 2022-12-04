@@ -7,8 +7,12 @@ RegisterNUICallback("data_status", function(data)
             TriggerEvent("xSound:songStopPlaying", data.id)
         end
         if data.type == "maxDuration" then
-            soundInfo[data.id].timeStamp = 0
+            if not soundInfo[data.id].SkipTimeStamp then
+                soundInfo[data.id].timeStamp = 0
+            end
             soundInfo[data.id].maxDuration = data.time
+
+            soundInfo[data.id].SkipTimeStamp = nil
         end
     end
 end)
@@ -25,9 +29,15 @@ RegisterNUICallback("events", function(data)
     end
     if type == "onPlay" then
         if globalOptionsCache[id] then
-            if globalOptionsCache[id].onPlayStart then
+            if globalOptionsCache[id].onPlayStartSilent then
+                globalOptionsCache[id].onPlayStartSilent(getInfo(id))
+            end
+
+            if globalOptionsCache[id].onPlayStart and not soundInfo[id].SkipEvents then
                 globalOptionsCache[id].onPlayStart(getInfo(id))
             end
+
+            soundInfo[id].SkipEvents = nil
         end
     end
     if type == "onEnd" then

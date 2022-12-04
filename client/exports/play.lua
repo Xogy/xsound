@@ -66,6 +66,21 @@ end
 
 exports('PlayUrlPos', PlayUrlPos)
 
+function PlayUrlPosSilent(name_, url_, volume_, pos, loop_)
+    if disableMusic then return end
+    SendNUIMessage({
+        status = "url",
+        name = name_,
+        url = url_,
+        x = pos.x,
+        y = pos.y,
+        z = pos.z,
+        dynamic = true,
+        volume = volume_,
+        loop = loop_ or false,
+    })
+end
+
 --function TextToSpeech(name_, lang, text, volume_)
 --    if disableMusic then return end
 --    SendNUIMessage({
