@@ -19,6 +19,18 @@ function getDefaultInfo()
     }
 end
 
+function UpdatePlayerPositionInNUI()
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+
+    SendNUIMessage({
+        status = "position",
+        x = pos.x,
+        y = pos.y,
+        z = pos.z
+    })
+end
+
 -- updating position on html side so we can count how much volume the sound needs.
 CreateThread(function()
     local refresh = config.RefreshTime
@@ -32,18 +44,14 @@ CreateThread(function()
             ped = PlayerPedId()
             pos = GetEntityCoords(ped)
 
-            -- we will update position only when player have moved from last position he was one
+            -- we will update position only when player have moved
             if #(lastPos - pos) >= 0.1 then
                 lastPos = pos
-                SendNUIMessage({
-                    status = "position",
-                    x = pos.x,
-                    y = pos.y,
-                    z = pos.z
-                })
+                UpdatePlayerPositionInNUI()
             end
 
             if changedPosition then
+                UpdatePlayerPositionInNUI()
                 SendNUIMessage({ status = "unmuteAll" })
             end
             changedPosition = false
