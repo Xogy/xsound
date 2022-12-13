@@ -1,1 +1,0 @@
-var refreshTime = 100;

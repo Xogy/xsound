@@ -4,10 +4,16 @@ var isMutedAll = false;
 
 var playerPos = [-90000,-90000,-90000];
 $(function(){
+
+    $.post('https://xsound/init');
+
 	window.addEventListener('message', function(event) {
 		var item = event.data;
         switch(item.status)
         {
+            case "init":
+                setInterval(updateVolumeSounds, item.time);
+                break;
             case "position":
                 playerPos = [item.x,item.y,item.z];
                 break;
@@ -261,5 +267,3 @@ function updateVolumeSounds()
         }
     }
 }
-
-setInterval(updateVolumeSounds, refreshTime);

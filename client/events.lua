@@ -1,3 +1,10 @@
+RegisterNUICallback("init", function()
+    SendNUIMessage({
+        status = "init",
+        time = config.RefreshTime,
+    })
+end)
+
 RegisterNUICallback("data_status", function(data)
     if soundInfo[data.id] ~= nil then
         if data.type == "finished" then
@@ -64,8 +71,7 @@ RegisterNUICallback("events", function(data)
     end
 end)
 
-RegisterNetEvent("xsound:stateSound")
-AddEventHandler("xsound:stateSound", function(state, data)
+RegisterNetEvent("xsound:stateSound", function(state, data)
     local soundId = data.soundId
 
     if state == "destroyOnFinish" then

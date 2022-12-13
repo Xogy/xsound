@@ -96,7 +96,7 @@ class SoundPlayer
 		}
 		*/
 
-		if(this.isMuted_ || isMutedAll){
+		if(this.dynamic && (this.isMuted_ || isMutedAll)){
 			if(!this.isYoutube)
 			{
 				if(this.audioPlayer != null) {
@@ -171,18 +171,17 @@ class SoundPlayer
                 enablejsapi: 1,
                 width: "0",
                 height: "0",
-		playerVars: {
-                  controls: 0,
+		        playerVars: {
+                    controls: 0,
                 },
                 events: {
                     'onReady': function(event){
+                        event.target.unMute();
                         event.target.setVolume(0);
                         event.target.playVideo();
                         isReady(event.target.getIframe().id);
                     },
                     'onStateChange': function(event){
-                        event.target.unMute();
-                        event.target.setVolume(0);
                         if (event.data == YT.PlayerState.ENDED) {
                             isLooped(event.target.getIframe().id);
                             ended(event.target.getIframe().id);
