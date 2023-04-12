@@ -1,3 +1,6 @@
+😍 Checkout our store for more amazing resources https://store.rcore.cz/ <br>
+🎵 Resources using this API https://store.rcore.cz/category/music
+
 #Improved audio library for FiveM
 
 Can work with API interact sound<br>
