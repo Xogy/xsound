@@ -1,16 +1,30 @@
 -- i recommend to NOT change the command name. it will make easier for people to use this command
 -- when ever is this library.. so please keep this command name on "streamermode" command
-RegisterCommand("streamermode", function(source, args, rawCommand)
-    disableMusic = not disableMusic
-    TriggerEvent("xsound:streamerMode", disableMusic)
-    if disableMusic then
-        TriggerEvent('chat:addMessage', { args = { "^1[xSound]", config.Messages["streamer_on"] } })
+local streamermode = false
+local cachedVolume = {}
+local function streamerMode()
+    streamerMode = not streamerMode
+    TriggerEvent('chat:addMessage', { args = { "^1[xSound]", streamerMode and config.Messages["streamer_on"] or config.Messages["streamer_off"] } })
 
-        for k, v in pairs(soundInfo) do
-            Destroy(v.id)
+    if not streamerMode then
+        for id, volume in pairs(cachedVolume) do
+            if soundExists(id) then
+                setVolume(id, volume)
+            end
         end
 
-    else
-        TriggerEvent('chat:addMessage', { args = { "^1[xSound]", config.Messages["streamer_off"] } })
+        cachedVolume = {}
+        return
     end
-end, false)
+
+    while streamerMode do
+        for _, data in pairs(soundInfo) do
+            if data.volume ~= 0 then
+                cachedVolume[data.id] = data.volume
+                setVolume(data.id, 0.0)
+            end
+        end
+        Wait(500)
+    end
+end
+RegisterCommand('streamermode', streamerMode)
