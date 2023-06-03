@@ -4,11 +4,17 @@ if config.AddonList.crewPhone then
 
     local ESX = nil
 
-    CreateThread(function ()
-        while ESX == nil do
-            Wait(50)
-            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        end
+    CreateThread(function()
+        xpcall(function()
+            ESX = exports['es_extended']['getSharedObject']()
+        end, function(error)
+            while ESX == nil do
+                Wait(50)
+                TriggerEvent('esx:getSharedObject', function(obj)
+                    ESX = obj
+                end)
+            end
+        end)
     end)
 
 
