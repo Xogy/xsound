@@ -1,16 +1,5 @@
 function PlayUrl(name_, url_, volume_, loop_, options)
     if disableMusic then return end
-    SendNUIMessage({
-        status = "url",
-        name = name_,
-        url = url_,
-        x = 0,
-        y = 0,
-        z = 0,
-        dynamic = false,
-        volume = volume_,
-        loop = loop_ or false,
-    })
 
     if soundInfo[name_] == nil then soundInfo[name_] = getDefaultInfo() end
 
@@ -28,23 +17,29 @@ function PlayUrl(name_, url_, volume_, loop_, options)
     else
         soundInfo[name_].destroyOnFinish = true
     end
+
+    CheckForCloseMusic()
+    UpdatePlayerPositionInNUI()
+    SendNUIMessage({ status = "unmuteAll" })
+
+    SendNUIMessage({
+        status = "url",
+        name = name_,
+        url = url_,
+        x = 0,
+        y = 0,
+        z = 0,
+        dynamic = false,
+        volume = volume_,
+        loop = loop_ or false,
+    })
 end
 
 exports('PlayUrl', PlayUrl)
 
 function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
     if disableMusic then return end
-    SendNUIMessage({
-        status = "url",
-        name = name_,
-        url = url_,
-        x = pos.x,
-        y = pos.y,
-        z = pos.z,
-        dynamic = true,
-        volume = volume_,
-        loop = loop_ or false,
-    })
+
     if soundInfo[name_] == nil then soundInfo[name_] = getDefaultInfo() end
 
     soundInfo[name_].volume = volume_
@@ -56,6 +51,25 @@ function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
     soundInfo[name_].isDynamic = true
 
     globalOptionsCache[name_] = options or { }
+
+    CheckForCloseMusic()
+
+    if #(GetEntityCoords(PlayerPedId()) - pos) < 10.0 + config.distanceBeforeUpdatingPos then
+        UpdatePlayerPositionInNUI()
+        SendNUIMessage({ status = "unmuteAll" })
+    end
+
+    SendNUIMessage({
+        status = "url",
+        name = name_,
+        url = url_,
+        x = pos.x,
+        y = pos.y,
+        z = pos.z,
+        dynamic = true,
+        volume = volume_,
+        loop = loop_ or false,
+    })
 
     if loop_ then
         soundInfo[name_].destroyOnFinish = false
