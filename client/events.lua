@@ -77,7 +77,7 @@ RegisterNUICallback("events", function(data, cb)
     if cb then cb('ok') end
 end)
 
-RegisterNetEvent("xsound:stateSound", function(state, data)
+RegisterNetEvent("xsound:stateSound", function(source, state, data)
     local soundId = data.soundId
 
     if state == "destroyOnFinish" then
