@@ -1,22 +1,24 @@
 function PlayUrl(source, name_, url_, volume_, loop_)
-    TriggerClientEvent("xsound:stateSound", source, "play", {
-        soundId = name_,
-        url = url_,
-        volume = volume_,
-        loop = loop_
-    })
+    local data = {}
+    data.soundId = name_
+    data.url = url_
+    data.volume = volume_
+    data.loop = loop
+
+    TriggerClientEvent("xsound:stateSound", source, "play", data)
 end
 
 exports('PlayUrl', PlayUrl)
 
 function PlayUrlPos(source, name_, url_, volume_, pos, loop_)
-    TriggerClientEvent("xsound:stateSound", source, "playpos", {
-        soundId = name_,
-        position = pos,
-        url = url_,
-        volume = volume_,
-        loop = loop_
-    })
+    local data = {}
+    data.soundId = name_
+    data.url = url_
+    data.volume = volume_
+    data.position = pos
+    data.loop = loop
+
+    TriggerClientEvent("xsound:stateSound", source, "playpos", data)
 end
 
 exports('PlayUrlPos', PlayUrlPos)
