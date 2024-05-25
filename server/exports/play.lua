@@ -3,7 +3,7 @@ function PlayUrl(source, name_, url_, volume_, loop_)
     data.soundId = name_
     data.url = url_
     data.volume = volume_
-    data.loop = loop
+    data.loop = loop_
 
     TriggerClientEvent("xsound:stateSound", source, "play", data)
 end
@@ -16,7 +16,7 @@ function PlayUrlPos(source, name_, url_, volume_, pos, loop_)
     data.url = url_
     data.volume = volume_
     data.position = pos
-    data.loop = loop
+    data.loop = loop_
 
     TriggerClientEvent("xsound:stateSound", source, "playpos", data)
 end
