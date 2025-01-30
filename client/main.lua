@@ -110,7 +110,6 @@ function PlayMusicFromCache(data)
     local musicCache = soundInfo[data.id]
     if musicCache then
         musicCache.SkipEvents = true
-        musicCache.SkipTimeStamp = true
 
         PlayUrlPosSilent(data.id, data.url, data.volume, data.position, data.loop)
         onPlayStartSilent(data.id, function()
