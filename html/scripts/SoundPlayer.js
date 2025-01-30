@@ -68,6 +68,7 @@ class SoundPlayer
 
 
 	setSoundUrl(result) {
+	    result = DOMPurify.sanitize(result);
 	    this.url = result.replace(/<[^>]*>?/gm, '');
 	}
 
@@ -154,7 +155,6 @@ class SoundPlayer
                 },
             });
             $("#" + this.div_id).remove();
-            $("body").append("<div id = '"+ this.div_id +"' style='display:none'>"+this.getUrlSound() +"</div>")
         }
         else
         {
