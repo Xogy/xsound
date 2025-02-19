@@ -84,15 +84,13 @@ class SoundPlayer
 		if(this.max_volume == -1) this.max_volume = result; 
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
 
-        if (this.isDynamic()) {
-            let volume = result;
-            if (this.isMuted() || IsAllMuted) volume = 0;
+        let volume = result;
+        if (this.isDynamic() && (this.isMuted() || IsAllMuted)) volume = 0;
 
-            if (this.isAudioYoutubePlayer() && this.yPlayer && this.isYoutubePlayerReady()) {
-                this.yPlayer.setVolume(volume * 100);
-            } else if (this.audioPlayer) {
-                this.audioPlayer.volume(volume);
-            }
+        if (this.isAudioYoutubePlayer() && this.yPlayer && this.isYoutubePlayerReady()) {
+            this.yPlayer.setVolume(volume * 100);
+        } else if (this.audioPlayer) {
+            this.audioPlayer.volume(volume);
         }
 	}
   
