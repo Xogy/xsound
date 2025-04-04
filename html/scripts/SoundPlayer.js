@@ -1,118 +1,161 @@
 let identifierCounterVariable = 0;
 
-class SoundPlayer
-{
+class SoundPlayer {
     static yPlayer = null;
     youtubePlayerReady = false;
 
-	constructor()
-	{
-		this.url = "test";
-		this.name = "";
-		this.dynamic = false;
-		this.distance = 10;
-		this.volume = 1.0;
-		this.pos = [0.0,0.0,0.0];
-		this.max_volume = -1.0; 
-		this.div_id = "myAudio_" + identifierCounterVariable++;
-		this.loop = false;
-		this.isYoutube = false;
-		this.load = false;
-		this.isMuted_ = false;
-		this.audioPlayer = null;
-	}
+    constructor() {
+        this.url = "test";
+        this.name = "";
+        this.dynamic = false;
+        this.distance = 10;
+        this.volume = 1.0;
+        this.pos = [ 0.0, 0.0, 0.0 ];
+        this.max_volume = -1.0;
+        this.div_id = "myAudio_" + identifierCounterVariable++;
+        this.loop = false;
+        this.isYoutube = false;
+        this.load = false;
+        this.isMuted_ = false;
+        this.audioPlayer = null;
+    }
 
-	setYoutubePlayerReady(result){
-	    this.youtubePlayerReady = result;
-	}
+    setYoutubePlayerReady(result) {
+        this.youtubePlayerReady = result;
+    }
 
-	isYoutubePlayerReady(){
-	    return this.youtubePlayerReady;
-	}
+    isYoutubePlayerReady() {
+        return this.youtubePlayerReady;
+    }
 
-	isAudioYoutubePlayer(){
-	    return this.isYoutube;
-	}
+    isAudioYoutubePlayer() {
+        return this.isYoutube;
+    }
 
-	getDistance() { return this.distance;}
-	getLocation() { return this.pos;     }
-	getVolume()   { return this.volume;  }
-	getMaxVolume(){ return this.max_volume;  }
-	getUrlSound() { return this.url;     }
-	isDynamic()   { return this.dynamic; }
-	getDivId()    { return this.div_id;  }
-	isLoop()      { return this.loop;    }
-	getName()     { return this.name;    }
-	loaded()      { return this.load;    }
+    getDistance() {
+        return this.distance;
+    }
 
-	getAudioPlayer()    { return this.audioPlayer; }
-	getYoutubePlayer()  { return this.yPlayer;     }
+    getLocation() {
+        return this.pos;
+    }
 
-	getAudioCurrentTime(){
-	    if(this.isAudioYoutubePlayer()){
-	        return this.getYoutubePlayer().getDuration();
-	    }
-	    return this.getAudioPlayer()._duration;
-	}
+    getVolume() {
+        return this.volume;
+    }
 
-    setLoaded(result)    { this.load = result;   }
-	setName(result)      { this.name = result;   }
-	setDistance(result)  { this.distance = result;   }
-	setDynamic(result)   { this.dynamic = result;    }
-	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_];    }
+    getMaxVolume() {
+        return this.max_volume;
+    }
+
+    getUrlSound() {
+        return this.url;
+    }
+
+    isDynamic() {
+        return this.dynamic;
+    }
+
+    getDivId() {
+        return this.div_id;
+    }
+
+    isLoop() {
+        return this.loop;
+    }
+
+    getName() {
+        return this.name;
+    }
+
+    loaded() {
+        return this.load;
+    }
+
+    getAudioPlayer() {
+        return this.audioPlayer;
+    }
+
+    getYoutubePlayer() {
+        return this.yPlayer;
+    }
+
+    getAudioCurrentTime() {
+        if (this.isAudioYoutubePlayer()) {
+            return this.getYoutubePlayer().getDuration();
+        }
+        return this.getAudioPlayer()._duration;
+    }
+
+    setLoaded(result) {
+        this.load = result;
+    }
+
+    setName(result) {
+        this.name = result;
+    }
+
+    setDistance(result) {
+        this.distance = result;
+    }
+
+    setDynamic(result) {
+        this.dynamic = result;
+    }
+
+    setLocation(x_, y_, z_) {
+        this.pos = [ x_, y_, z_ ];
+    }
 
 
-	setSoundUrl(result) {
-	    this.url = sanitizeURL(result);
-	}
+    setSoundUrl(result) {
+        this.url = sanitizeURL(result);
+    }
 
-	setLoop(result) {
-        if(!this.isAudioYoutubePlayer())
-        {
-            if(this.audioPlayer != null){
+    setLoop(result) {
+        if (!this.isAudioYoutubePlayer()) {
+            if (this.audioPlayer != null) {
                 this.audioPlayer.loop(result);
             }
         }
-	    this.loop = result;
-	}
+        this.loop = result;
+    }
 
 
-	setMaxVolume(result) { this.max_volume = result; }
-	setVolume(result)    
-	{
-		this.volume = result;
-		if(this.max_volume == -1) this.max_volume = result; 
-		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
+    setMaxVolume(result) {
+        this.max_volume = result;
+    }
 
-        if (this.isDynamic()) {
-            let volume = result;
-            if (this.isMuted() || IsAllMuted) volume = 0;
+    setVolume(result) {
+        this.volume = result;
+        if (this.max_volume == -1) this.max_volume = result;
+        if (this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
 
-            if (this.isAudioYoutubePlayer() && this.yPlayer && this.isYoutubePlayerReady()) {
-                this.yPlayer.setVolume(volume * 100);
-            } else if (this.audioPlayer) {
-                this.audioPlayer.volume(volume);
-            }
+        let volume = result;
+        if (this.isDynamic() && (this.isMuted() || IsAllMuted)) volume = 0;
+
+        if (this.isAudioYoutubePlayer() && this.yPlayer && this.isYoutubePlayerReady()) {
+            this.yPlayer.setVolume(volume * 100);
+        } else if (this.audioPlayer) {
+            this.audioPlayer.volume(volume);
         }
-	}
-  
-	create()
-	{
-	    const link = getYoutubeUrlId(this.getUrlSound());
+    }
 
-        if(link === "")
-        {
+    create() {
+        const link = getYoutubeUrlId(this.getUrlSound());
+
+        if (link === "") {
             this.isYoutube = false;
 
             this.audioPlayer = new Howl({
-                src: [this.getUrlSound()],
+                src: [ this.getUrlSound() ],
                 loop: false,
                 html5: true,
                 autoplay: false,
                 volume: 0.00,
-                format: ['mp3'],
+                format: [ 'mp3' ],
                 onload: () => {
-                    $.post('https://xsound/events', JSON.stringify({ type: "onLoading",id: this.getName() }));
+                    $.post('https://xsound/events', JSON.stringify({ type: "onLoading", id: this.getName() }));
                 },
                 onend: () => {
                     ended(this.getName());
@@ -122,16 +165,14 @@ class SoundPlayer
                 },
             });
             $("#" + this.div_id).remove();
-        }
-        else
-        {
+        } else {
             this.isYoutube = true;
             this.setYoutubePlayerReady(false);
             $("#" + this.div_id).remove();
-            $("body").append("<div id='"+ this.div_id +"'></div>");
+            $("body").append("<div id='" + this.div_id + "'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
 
-                startSeconds:Number,
+                startSeconds: Number,
 
                 videoId: link,
                 origin: window.location.href,
@@ -144,12 +185,12 @@ class SoundPlayer
                     quality: 'auto',
                 },
                 events: {
-                    'onReady':(event) => {
+                    'onReady': (event) => {
                         event.target.unMute();
                         event.target.setVolume(0);
                         event.target.playVideo();
                         isReady(this.getName());
-                        $.post('https://xsound/events', JSON.stringify({ type: "onLoading",id: this.getName() }));
+                        $.post('https://xsound/events', JSON.stringify({ type: "onLoading", id: this.getName() }));
                     },
                     'onStateChange': (event) => {
                         if (event.data == YT.PlayerState.ENDED) {
@@ -159,10 +200,9 @@ class SoundPlayer
                 }
             });
         }
-	}
+    }
 
-    destroyYoutubeApi()
-    {
+    destroyYoutubeApi() {
         if (this.yPlayer) {
             if (typeof this.yPlayer.stopVideo === "function" && typeof this.yPlayer.destroy === "function") {
                 this.yPlayer.stopVideo();
@@ -173,16 +213,15 @@ class SoundPlayer
         }
     }
 
-	delete()
-	{
-	    if(this.audioPlayer != null){
+    delete() {
+        if (this.audioPlayer != null) {
             this.audioPlayer.pause();
             this.audioPlayer.stop();
             this.audioPlayer.unload();
-	    }
-	    this.audioPlayer = null;
-	    $("#" + this.div_id).remove();
-	}
+        }
+        this.audioPlayer = null;
+        $("#" + this.div_id).remove();
+    }
 
     updateVolume(dd, maxd) {
         const d_max = maxd;
@@ -201,82 +240,62 @@ class SoundPlayer
         }
     }
 
-	play() 
-	{
-        if(!this.isAudioYoutubePlayer())
-        {
-            if(this.audioPlayer != null){
+    play() {
+        if (!this.isAudioYoutubePlayer()) {
+            if (this.audioPlayer != null) {
                 this.audioPlayer.play();
             }
-        }
-        else
-        {
-            if(this.isYoutubePlayerReady()){
+        } else {
+            if (this.isYoutubePlayerReady()) {
                 this.yPlayer.playVideo();
             }
         }
-	}
-	pause()
-	{
-        if(!this.isAudioYoutubePlayer())
-        {
-            if(this.audioPlayer != null) this.audioPlayer.pause();
-        }
-        else
-        {
-            if(this.isYoutubePlayerReady()) this.yPlayer.pauseVideo();
-        }
-	}
+    }
 
-	resume()
-	{
-        if(!this.isAudioYoutubePlayer())
-        {
-            if(this.audioPlayer != null) this.audioPlayer.play();
+    pause() {
+        if (!this.isAudioYoutubePlayer()) {
+            if (this.audioPlayer != null) this.audioPlayer.pause();
+        } else {
+            if (this.isYoutubePlayerReady()) this.yPlayer.pauseVideo();
         }
-        else
-        {
-            if(this.isYoutubePlayerReady()) this.yPlayer.playVideo();
-        }
-	}
+    }
 
-	isMuted()
-	{
+    resume() {
+        if (!this.isAudioYoutubePlayer()) {
+            if (this.audioPlayer != null) this.audioPlayer.play();
+        } else {
+            if (this.isYoutubePlayerReady()) this.yPlayer.playVideo();
+        }
+    }
+
+    isMuted() {
         return this.isMuted_;
-	}
+    }
 
-	mute()
-	{
+    mute() {
         this.isMuted_ = true;
         this.setVolume(0)
-	}
+    }
 
-	unmute()
-	{
+    unmute() {
         this.isMuted_ = false;
         this.setVolume(this.getVolume())
-	}
+    }
 
-	unmuteSilent()
-	{
+    unmuteSilent() {
         this.isMuted_ = false;
-	}
+    }
 
-	setTimeStamp(time)
-	{
-        if(!this.isAudioYoutubePlayer())
-        {
+    setTimeStamp(time) {
+        if (!this.isAudioYoutubePlayer()) {
             this.audioPlayer.seek(time);
-        }
-        else
-        {
+        } else {
             this.yPlayer.seekTo(time);
         }
-	}
+    }
 
-	isPlaying()
-	{
-        if(this.isAudioYoutubePlayer()) return this.isYoutubePlayerReady() && this.yPlayer.getPlayerState() == 1;
-        else return this.audioPlayer != null  && this.audioPlayer.playing();
-	}
+    isPlaying() {
+        if (this.isAudioYoutubePlayer()) return this.isYoutubePlayerReady() && this.yPlayer.getPlayerState() == 1;
+        else return this.audioPlayer != null && this.audioPlayer.playing();
+    }
 }
