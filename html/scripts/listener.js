@@ -1,6 +1,6 @@
 const soundList = [];
 let closeToPlayer = [];
-let IsAllMuted = false;
+var IsAllMuted = false;
 
 let updateVolumeSoundTimer;
 let updateCacheTimer;
