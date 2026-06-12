@@ -1,4 +1,5 @@
 function Distance(name_, distance_)
+    if not soundExists(name_) then return end
     SendNUIMessage({
         status = "distance",
         name = name_,
@@ -10,6 +11,7 @@ end
 exports('Distance', Distance)
 
 function Position(name_, pos)
+    if not soundExists(name_) then return end
     SendNUIMessage({
         status = "soundPosition",
         name = name_,
@@ -24,6 +26,8 @@ end
 exports('Position', Position)
 
 function Destroy(name_)
+    local info = getInfo(name_)
+
     SendNUIMessage({
         status = "delete",
         name = name_
@@ -31,7 +35,7 @@ function Destroy(name_)
     soundInfo[name_] = nil
 
     if globalOptionsCache[name_] ~= nil and globalOptionsCache[name_].onPlayEnd ~= nil then
-        globalOptionsCache[name_].onPlayEnd(getInfo(name_))
+        globalOptionsCache[name_].onPlayEnd(info)
     end
 
     globalOptionsCache[name_] = nil
@@ -48,6 +52,7 @@ end
 exports('Destroy', Destroy)
 
 function Resume(name_)
+    if not soundExists(name_) then return end
     SendNUIMessage({
         status = "resume",
         name = name_
@@ -63,6 +68,7 @@ end
 exports('Resume', Resume)
 
 function Pause(name_)
+    if not soundExists(name_) then return end
     SendNUIMessage({
         status = "pause",
         name = name_
@@ -79,6 +85,7 @@ end
 exports('Pause', Pause)
 
 function setVolume(name_, vol)
+    if not soundExists(name_) then return end
     SendNUIMessage({
         status = "volume",
         volume = vol,
@@ -90,6 +97,7 @@ end
 exports('setVolume', setVolume)
 
 function setVolumeMax(name_, vol)
+    if not soundExists(name_) then return end
     SendNUIMessage({
         status = "max_volume",
         volume = vol,
@@ -101,6 +109,7 @@ end
 exports('setVolumeMax', setVolumeMax)
 
 function setTimeStamp(name_, timestamp)
+    if not soundExists(name_) then return end
     getInfo(name_).timeStamp = timestamp
     SendNUIMessage({
         name = name_,
@@ -112,12 +121,14 @@ end
 exports('setTimeStamp', setTimeStamp)
 
 function destroyOnFinish(id, bool)
+    if not soundExists(id) then return end
     soundInfo[id].destroyOnFinish = bool
 end
 
 exports('destroyOnFinish', destroyOnFinish)
 
 function setSoundLoop(name, value)
+    if not soundExists(name) then return end
     SendNUIMessage({
         status = "loop",
         name = name,
