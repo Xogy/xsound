@@ -111,6 +111,17 @@ if config.AddonList.crewPhone then
     end)
 
     -- Müzik Konum güncelleme
+    local function distanceForSpeed(vehicle)
+        local speed = GetEntitySpeed(vehicle) * 3.6
+        if speed > 200.0 then return 140
+        elseif speed > 150.0 then return 125
+        elseif speed > 110.0 then return 100
+        elseif speed > 90.0 then return 80
+        elseif speed > 60.0 then return 65
+        elseif speed > 30.0 then return 40
+        else return 25 end
+    end
+
     local time = 100
     Citizen.CreateThread(function()
         while true do
@@ -127,50 +138,11 @@ if config.AddonList.crewPhone then
                     if mesafe < 200 then
                         time = 100
                         Position(x, kordinat)
-                        if calanMuzikler[x]["mp3"] then
-                            if IsPedInAnyVehicle(ped, true) == 1 then
-                                local vehicle = GetVehiclePedIsIn(ped, false)
-                                if GetEntitySpeed(vehicle) * 3.6 > 200.0 then
-                                    Distance(x, 140)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 150.0 then
-                                    Distance(x, 125)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 110.0 then
-                                    Distance(x, 100)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 90.0 then
-                                    Distance(x, 80)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 60.0 then
-                                    Distance(x, 65)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 30.0 then
-                                    Distance(x, 40)
-                                else
-                                    Distance(x, 25)
-                                end
-                            else
-                                Distance(x, 10)
-                            end
+                        if IsPedInAnyVehicle(ped, true) == 1 then
+                            Distance(x, distanceForSpeed(GetVehiclePedIsIn(ped, false)))
                         else
-                            if IsPedInAnyVehicle(ped, true) == 1 then
-                                local vehicle = GetVehiclePedIsIn(ped, false)
-                                if GetEntitySpeed(vehicle) * 3.6 > 200.0 then
-                                    Distance(x, 140)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 150.0 then
-                                    Distance(x, 125)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 110.0 then
-                                    Distance(x, 100)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 90.0 then
-                                    Distance(x, 80)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 60.0 then
-                                    Distance(x, 65)
-                                elseif GetEntitySpeed(vehicle) * 3.6 > 30.0 then
-                                    Distance(x, 40)
-                                else
-                                    Distance(x, 25)
-                                end
-                            else
-                                Distance(x, 15)
-                            end
+                            Distance(x, calanMuzikler[x]["mp3"] and 10 or 15)
                         end
-
                     else
                         time = 2000
                         Position(x, kordinat)
