@@ -1,4 +1,4 @@
-const soundList = [];
+const soundList = {};
 let closeToPlayer = [];
 var IsAllMuted = false;
 
