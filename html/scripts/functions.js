@@ -1,18 +1,40 @@
 function sanitizeURL(url) {
+    if (typeof url !== "string") {
+        return "";
+    }
+
     url = DOMPurify.sanitize(url);
-    return url.replace(/<[^>]*>?/gm, '');
+    url = url.replace(/<[^>]*>?/gm, '').trim();
+
+    if (url === "") {
+        return "";
+    }
+
+    if (/^(https?:)?\/\//i.test(url) || /^\.{0,2}\//.test(url)) {
+        return url;
+    }
+
+    return "";
 }
 
 function getYoutubeUrlId(url) {
+    if (typeof url !== "string") {
+        return "";
+    }
+
     let videoId = "";
     if (url.indexOf("youtube") !== -1) {
         let urlParts = url.split("?v=");
-        videoId = urlParts[1].substring(0, 11);
+        if (urlParts.length > 1 && urlParts[1]) {
+            videoId = urlParts[1].substring(0, 11);
+        }
     }
 
-    if (url.indexOf("youtu.be") !== -1) {
+    if (videoId === "" && url.indexOf("youtu.be") !== -1) {
         let urlParts = url.replace("//", "").split("/");
-        videoId = urlParts[1].substring(0, 11);
+        if (urlParts.length > 1 && urlParts[1]) {
+            videoId = urlParts[1].substring(0, 11);
+        }
     }
     return videoId;
 }
