@@ -96,9 +96,10 @@ CreateThread(function()
         Wait(1000)
         for k, v in pairs(soundInfo) do
             if v.playing or v.wasSilented then
-                if getInfo(v.id).timeStamp ~= nil and getInfo(v.id).maxDuration ~= nil then
-                    if getInfo(v.id).timeStamp < getInfo(v.id).maxDuration then
-                        getInfo(v.id).timeStamp = getInfo(v.id).timeStamp + 1
+                local info = getInfo(v.id)
+                if info and info.timeStamp ~= nil and info.maxDuration ~= nil then
+                    if info.timeStamp < info.maxDuration then
+                        info.timeStamp = info.timeStamp + 1
                     end
                 end
             end
@@ -128,23 +129,25 @@ CreateThread(function()
     local destroyedMusicList = {}
     while true do
         Wait(500)
-        ped = PlayerPedId()
-        playerPos = GetEntityCoords(ped)
-        for k, v in pairs(soundInfo) do
-            if v.position ~= nil and v.isDynamic then
-                if #(v.position - playerPos) < (v.distance + config.distanceBeforeUpdatingPos) then
-                    if not isPaused(v.id) then
-                        if destroyedMusicList[v.id] then
-                            destroyedMusicList[v.id] = nil
-                            v.wasSilented = true
-                            PlayMusicFromCache(v)
+        if next(soundInfo) ~= nil then
+            ped = PlayerPedId()
+            playerPos = GetEntityCoords(ped)
+            for k, v in pairs(soundInfo) do
+                if v.position ~= nil and v.isDynamic then
+                    if #(v.position - playerPos) < (v.distance + config.distanceBeforeUpdatingPos) then
+                        if not isPaused(v.id) then
+                            if destroyedMusicList[v.id] then
+                                destroyedMusicList[v.id] = nil
+                                v.wasSilented = true
+                                PlayMusicFromCache(v)
+                            end
                         end
-                    end
-                else
-                    if not destroyedMusicList[v.id] then
-                        destroyedMusicList[v.id] = true
-                        v.wasSilented = false
-                        DestroySilent(v.id)
+                    else
+                        if not destroyedMusicList[v.id] then
+                            destroyedMusicList[v.id] = true
+                            v.wasSilented = false
+                            DestroySilent(v.id)
+                        end
                     end
                 end
             end
