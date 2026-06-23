@@ -22,6 +22,13 @@ function isYoutubeURL(url) {
 }
 
 let durationIdId = 0;
+let YOUTUBE_API_KEY = "";
+
+function iso8601ToSeconds(iso) {
+    const m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso || "");
+    if (!m) return null;
+    return (parseInt(m[1] || 0) * 3600) + (parseInt(m[2] || 0) * 60) + parseInt(m[3] || 0);
+}
 
 function getDurationOfMusicFromURL(url, timeStamp) {
     url = sanitizeURL(url);
@@ -47,28 +54,18 @@ function getDurationOfMusicFromURL(url, timeStamp) {
             },
         });
     } else {
-        const div_id = "duration_temp_" + (durationIdId++);
-        const iframeUrl = "https://cfx-nui-xsound/html/index2.html?url=" + url;
-
-        $("body").append("<iframe id='" + div_id + "' src='" + iframeUrl + "' allow='autoplay' style='display:none;'></iframe>");
-
-        let attempts = 0;
-        const maxAttempts = 50;
-
-        let checkReady = setInterval(() => {
-            attempts++;
-            let frame = document.getElementById(div_id);
-            if (frame && frame.contentWindow && frame.contentWindow.yPlayer) {
-                clearInterval(checkReady);
-                const duration = frame.contentWindow.yPlayer.getDuration();
-                timeStamp(duration);
-                $("#" + div_id).remove();
-            } else if (attempts >= maxAttempts) {
-                clearInterval(checkReady);
-                timeStamp(null);
-                $("#" + div_id).remove();
-            }
-        }, 100);
+        if (typeof YOUTUBE_API_KEY === "string" && YOUTUBE_API_KEY !== "") {
+            fetch("https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=" + link + "&key=" + YOUTUBE_API_KEY)
+                .then((r) => r.json())
+                .then((data) => {
+                    const item = data && data.items && data.items[0];
+                    const iso = item && item.contentDetails && item.contentDetails.duration;
+                    timeStamp(iso ? iso8601ToSeconds(iso) : null);
+                })
+                .catch(() => timeStamp(null));
+        } else {
+            timeStamp(null);
+        }
     }
 }
 

@@ -19,6 +19,7 @@ class SoundPlayer {
 		this.checkReady = null;
 		this.yPlayer = null;
 		this.youtubePlayerReady = false;
+		this.poolPlayer = null;
 	}
 
 	setYoutubePlayerReady(result) {
@@ -173,34 +174,16 @@ class SoundPlayer {
 			this.setYoutubePlayerReady(false);
 			$("#" + this.div_id).remove();
 
-			const url = "https://cfx-nui-xsound/html/index2.html?url=" + sanitizeURL(this.getUrlSound() + "&debug=" + debug);
-
-			$("<iframe>", { id: this.div_id, src: url, }).css({ "width": "320px", "height": "180px" }).appendTo("body");
-
-			let attempts = 0;
-			const maxAttempts = 50;
-
-			let frame = document.getElementById(this.div_id);
-			this.checkReady = setInterval(() => {
-				attempts++;
-
-				if (frame && frame.contentWindow && frame.contentWindow.yPlayer) {
-					this.releaseCheckReadyTimer();
+			this.poolPlayer = YtPool.acquire(link,
+				(yp) => {
+					this.yPlayer = yp;
 					this.setYoutubePlayerReady(true);
-
-					this.yPlayer = frame.contentWindow.yPlayer;
-					this.yPlayer.addEventListener('onStateChange', (event) => {
-						if (event.data == 0) {
-							ended(this.getName());
-						}
-					});
-
 					isReady(this.getName());
-				} else if (attempts >= maxAttempts) {
-					this.releaseCheckReadyTimer();
-					this.cleanIframe();
+				},
+				() => {
+					ended(this.getName());
 				}
-			}, 100);
+			);
 		}
 	}
 
@@ -228,11 +211,11 @@ class SoundPlayer {
 	}
 
 	destroyYoutubeApi() {
-		if (this.yPlayer) {
-			this.youtubePlayerReady = false;
+		if (this.poolPlayer) {
+			YtPool.release(this.poolPlayer);
+			this.poolPlayer = null;
 			this.yPlayer = null;
-
-			this.cleanIframe();
+			this.youtubePlayerReady = false;
 		}
 		this.releaseCheckReadyTimer();
 	}
@@ -246,7 +229,12 @@ class SoundPlayer {
 
 		this.audioPlayer = null;
 		this.releaseCheckReadyTimer();
-		if (this.yPlayer === null) {
+		if (this.poolPlayer) {
+			YtPool.release(this.poolPlayer);
+			this.poolPlayer = null;
+			this.yPlayer = null;
+			this.youtubePlayerReady = false;
+		} else if (this.yPlayer === null) {
 			$("#" + this.div_id).remove();
 		}
 	}

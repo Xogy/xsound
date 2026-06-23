@@ -43,6 +43,35 @@ CreateThread(function()
     end
 end)
 
+CreateThread(function()
+    local idleSince = nil
+
+    while true do
+        Wait(2000)
+
+        local secs = config.idleDuiRecycleSec or 0
+        if secs > 0 and GlobalSoundDui then
+            if next(soundInfo) ~= nil then
+                idleSince = nil
+            else
+                if idleSince == nil then
+                    idleSince = GetGameTimer()
+                elseif (GetGameTimer() - idleSince) >= (secs * 1000) then
+                    idleSince = nil
+
+                    DestroyDui(GlobalSoundDui)
+                    GlobalSoundDui = nil
+
+                    Wait(500)
+
+                    GlobalSoundDui = CreateDui(DUI_URL, 1920, 1080)
+                    CreateDuiText(GlobalSoundDui)
+                end
+            end
+        end
+    end
+end)
+
 RegisterNUICallback("ping", function(data, cb)
     if pingCount ~= MAX_PING then
         pingCount = pingCount + 1

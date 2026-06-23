@@ -1,5 +1,6 @@
 fx_version 'cerulean'
 games { 'gta5', 'rdr3' }
+lua54 'yes'
 
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
@@ -27,6 +28,7 @@ client_scripts {
 
 server_scripts {
 	"config.lua",
+	"server/security.lua",
 	"server/exports/play.lua",
 	"server/exports/manipulation.lua",
 
@@ -44,6 +46,7 @@ files {
 	"html/scripts/listener.js",
 	"html/scripts/SoundPlayer.js",
 	"html/scripts/functions.js",
+	"html/scripts/ytpool.js",
 
 	"html/sounds/*.ogg",
 	"html/sounds/*.mp3",
