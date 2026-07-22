@@ -34,9 +34,10 @@ server_scripts {
 	"addon/**/server/*.lua",
 }
 
-ui_page "html/index.html"
+ui_page "html/main.html"
 
 files {
+	"html/main.html",
 	"html/index.html",
 
 	"html/scripts/listener.js",

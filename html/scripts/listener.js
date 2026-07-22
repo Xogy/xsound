@@ -233,3 +233,8 @@ function updateVolumeSounds() {
         }
     }
 }
+
+// heartbeat: the client watchdog recreates this browser if the pings stop
+setInterval(function () {
+    $.post("https://xsound/ping");
+}, 2000);
