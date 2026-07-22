@@ -39,23 +39,27 @@ RegisterNUICallback("events", function(data, cb)
         end
     end
 
+    -- delegates are third-party code: pcall so an error in one can never prevent
+    -- cb('ok') below, which would strand the NUI page's XHR forever
     if type == "onPlay" then
         if globalOptionsCache[id] then
             if globalOptionsCache[id].onPlayStartSilent then
-                globalOptionsCache[id].onPlayStartSilent(getInfo(id))
+                pcall(globalOptionsCache[id].onPlayStartSilent, getInfo(id))
             end
 
-            if globalOptionsCache[id].onPlayStart and not soundInfo[id].SkipEvents then
-                globalOptionsCache[id].onPlayStart(getInfo(id))
+            if globalOptionsCache[id].onPlayStart and soundInfo[id] and not soundInfo[id].SkipEvents then
+                pcall(globalOptionsCache[id].onPlayStart, getInfo(id))
             end
 
-            soundInfo[id].SkipEvents = nil
+            if soundInfo[id] then
+                soundInfo[id].SkipEvents = nil
+            end
         end
     end
     if type == "onEnd" then
         if globalOptionsCache[id] then
             if globalOptionsCache[id].onPlayEnd then
-                globalOptionsCache[id].onPlayEnd(getInfo(id))
+                pcall(globalOptionsCache[id].onPlayEnd, getInfo(id))
             end
         end
         if soundInfo[id] then
@@ -63,14 +67,15 @@ RegisterNUICallback("events", function(data, cb)
                 soundInfo[id].timeStamp = 0
             end
             if soundInfo[id].destroyOnFinish and not soundInfo[id].loop then
-                Destroy(id)
+                -- onPlayEnd already fired above; skip the duplicate in Destroy
+                Destroy(id, true)
             end
         end
     end
     if type == "onLoading" then
         if globalOptionsCache[id] then
             if globalOptionsCache[id].onLoading then
-                globalOptionsCache[id].onLoading(getInfo(id))
+                pcall(globalOptionsCache[id].onLoading, getInfo(id))
             end
         end
     end

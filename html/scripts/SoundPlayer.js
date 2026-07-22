@@ -1,10 +1,11 @@
 let identifierCounterVariable = 0;
 
 class SoundPlayer {
-    static yPlayer = null;
-    youtubePlayerReady = false;
-
     constructor() {
+        this.yPlayer = null;
+        this.youtubePlayerReady = false;
+        this.durationReported = false;
+        this.apiWaitTries = 0;
         this.url = "test";
         this.name = "";
         this.dynamic = false;
@@ -143,6 +144,7 @@ class SoundPlayer {
 
     create() {
         const link = getYoutubeUrlId(this.getUrlSound());
+        this.durationReported = false;
 
         if (link === "") {
             this.isYoutube = false;
@@ -155,7 +157,14 @@ class SoundPlayer {
                 volume: 0.00,
                 format: [ 'mp3' ],
                 onload: () => {
+                    postMaxDuration(this.getName(), this.getUrlSound(), this.audioPlayer ? this.audioPlayer.duration() : 0);
                     $.post('https://xsound/events', JSON.stringify({ type: "onLoading", id: this.getName() }));
+                },
+                onloaderror: () => {
+                    // a failed load must still reach the client's onEnd/destroyOnFinish
+                    // path, otherwise the entry (and this Howl) is stranded forever
+                    $.post('https://xsound/data_status', JSON.stringify({ type: "finished", id: this.getName() }));
+                    $.post('https://xsound/events', JSON.stringify({ type: "onEnd", id: this.getName() }));
                 },
                 onend: () => {
                     ended(this.getName());
@@ -166,23 +175,32 @@ class SoundPlayer {
             });
             $("#" + this.div_id).remove();
         } else {
+            // iframe_api loads the widget API asynchronously; retry briefly instead of throwing
+            if (typeof YT === "undefined" || !YT.Player) {
+                if (this.apiWaitTries++ < 40) {
+                    setTimeout(() => this.create(), 250);
+                } else {
+                    // API unreachable: report the sound as finished so the client
+                    // runs its destroy path instead of waiting forever
+                    $.post('https://xsound/data_status', JSON.stringify({ type: "finished", id: this.getName() }));
+                    $.post('https://xsound/events', JSON.stringify({ type: "onEnd", id: this.getName() }));
+                }
+                return;
+            }
+
             this.isYoutube = true;
+            this.destroyYoutubeApi();
             this.setYoutubePlayerReady(false);
             $("#" + this.div_id).remove();
             $("body").append("<div id='" + this.div_id + "'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
-
-                startSeconds: Number,
-
                 videoId: link,
-                origin: window.location.href,
-                enablejsapi: 1,
                 width: "0",
                 height: "0",
                 playerVars: {
                     autoplay: 0,
                     controls: 0,
-                    quality: 'auto',
+                    enablejsapi: 1,
                 },
                 events: {
                     'onReady': (event) => {
@@ -193,9 +211,24 @@ class SoundPlayer {
                         $.post('https://xsound/events', JSON.stringify({ type: "onLoading", id: this.getName() }));
                     },
                     'onStateChange': (event) => {
+                        // getDuration() is only reliable once playback has started
+                        if (event.data == YT.PlayerState.PLAYING && !this.durationReported) {
+                            const duration = event.target.getDuration();
+                            if (duration && isFinite(duration) && duration > 0) {
+                                this.durationReported = true;
+                                postMaxDuration(this.getName(), this.getUrlSound(), duration);
+                            }
+                        }
                         if (event.data == YT.PlayerState.ENDED) {
                             ended(this.getName());
                         }
+                    },
+                    'onError': () => {
+                        // a dead video must not keep a live embed attached, and the
+                        // client still needs finished/onEnd to run its destroy path
+                        this.destroyYoutubeApi();
+                        $.post('https://xsound/data_status', JSON.stringify({ type: "finished", id: this.getName() }));
+                        $.post('https://xsound/events', JSON.stringify({ type: "onEnd", id: this.getName() }));
                     }
                 }
             });
@@ -203,17 +236,36 @@ class SoundPlayer {
     }
 
     destroyYoutubeApi() {
-        if (this.yPlayer) {
-            if (typeof this.yPlayer.stopVideo === "function" && typeof this.yPlayer.destroy === "function") {
-                this.yPlayer.stopVideo();
-                this.yPlayer.destroy();
-                this.youtubePlayerReady = false;
-                this.yPlayer = null;
-            }
+        const player = this.yPlayer;
+        if (!player) return;
+        this.yPlayer = null;
+        this.youtubePlayerReady = false;
+
+        // stopVideo() only exists once the iframe handshake has completed, but the
+        // player must be released either way — never gate destruction on readiness
+        let frame = null;
+        try { if (typeof player.getIframe === "function") frame = player.getIframe(); } catch (e) { }
+        if (!frame) frame = document.getElementById(this.div_id);
+
+        try { if (typeof player.stopVideo === "function") player.stopVideo(); } catch (e) { }
+
+        if (frame && frame.contentWindow) {
+            // Navigate the embed to about:blank before detaching it: CEF does not
+            // promptly release the document of an iframe removed while live. The id
+            // is cleared so delete()'s selector cannot remove it mid-navigation.
+            frame.id = "";
+            try { frame.src = "about:blank"; } catch (e) { }
+            setTimeout(() => {
+                try { if (typeof player.destroy === "function") player.destroy(); } catch (e) { }
+                try { frame.remove(); } catch (e) { }
+            }, 100);
+        } else {
+            try { if (typeof player.destroy === "function") player.destroy(); } catch (e) { }
         }
     }
 
     delete() {
+        this.destroyYoutubeApi();
         if (this.audioPlayer != null) {
             this.audioPlayer.pause();
             this.audioPlayer.stop();
@@ -288,8 +340,8 @@ class SoundPlayer {
 
     setTimeStamp(time) {
         if (!this.isAudioYoutubePlayer()) {
-            this.audioPlayer.seek(time);
-        } else {
+            if (this.audioPlayer != null) this.audioPlayer.seek(time);
+        } else if (this.yPlayer && this.isYoutubePlayerReady()) {
             this.yPlayer.seekTo(time);
         }
     }

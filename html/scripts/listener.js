@@ -56,8 +56,6 @@ $(function () {
 
                 sd = new SoundPlayer();
 
-                sendMaxDurationToClient(item);
-
                 sd.setName(item.name);
                 sd.setSoundUrl(item.url);
                 sd.setDynamic(item.dynamic);
@@ -115,7 +113,11 @@ $(function () {
                     sound.destroyYoutubeApi();
                     sound.delete();
                     delete soundList[item.name];
+                    closeToPlayer = closeToPlayer.filter((s) => s !== sound);
                 }
+                break;
+            case "getMaxTime":
+                sendMaxDurationToClient(item);
                 break;
             case "repeat":
                 sound = soundList[item.name];
@@ -137,8 +139,6 @@ $(function () {
                 if (sound != null) {
                     sound.destroyYoutubeApi();
                     sound.delete();
-
-                    sendMaxDurationToClient(item);
 
                     sound.setSoundUrl(item.url);
                     sound.setLoaded(false);

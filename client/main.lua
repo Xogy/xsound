@@ -2,6 +2,12 @@ globalOptionsCache = {}
 isPlayerCloseToMusic = false
 disableMusic = false
 
+-- ids whose NUI player was silently deleted (out of range) and must be recreated
+-- from cache on approach; Destroy() clears entries so the table cannot grow forever
+destroyedMusicList = {}
+-- consecutive out-of-range polls per id, for the destroy dwell below
+outOfRangeTicks = {}
+
 function getDefaultInfo()
     return {
         volume = 1.0,
@@ -96,9 +102,15 @@ CreateThread(function()
         Wait(1000)
         for k, v in pairs(soundInfo) do
             if v.playing or v.wasSilented then
-                if getInfo(v.id).timeStamp ~= nil and getInfo(v.id).maxDuration ~= nil then
-                    if getInfo(v.id).timeStamp < getInfo(v.id).maxDuration then
-                        getInfo(v.id).timeStamp = getInfo(v.id).timeStamp + 1
+                if v.timeStamp ~= nil and v.maxDuration ~= nil then
+                    if v.timeStamp < v.maxDuration then
+                        v.timeStamp = v.timeStamp + 1
+                    elseif destroyedMusicList[v.id] and v.maxDuration > 0
+                        and v.destroyOnFinish and not v.loop then
+                        -- Finished while silenced (out of range): no NUI player exists
+                        -- to report onEnd, so without this the entry lives forever and
+                        -- respawns a fresh YouTube embed on every range re-entry.
+                        Destroy(v.id)
                     end
                 end
             end
@@ -122,17 +134,26 @@ function PlayMusicFromCache(data)
 end
 
 -- If player is far away from music we will just delete it.
+-- Hysteresis + dwell: recreate at (distance + margin) but destroy only after the
+-- sound has stayed beyond (distance + margin + hysteresis) for several consecutive
+-- polls. A listener straddling the boundary must not rebuild a full YouTube embed
+-- every 500ms — that create/teardown churn is the main leak amplifier in the shared
+-- CEF process (issue #70). The band is inaudible: the NUI already mutes beyond
+-- v.distance, well inside the recreate radius.
 CreateThread(function()
     local ped = PlayerPedId()
     local playerPos = GetEntityCoords(ped)
-    local destroyedMusicList = {}
+    local hysteresis = 20.0
+    local destroyDwellTicks = 4
     while true do
         Wait(500)
         ped = PlayerPedId()
         playerPos = GetEntityCoords(ped)
         for k, v in pairs(soundInfo) do
             if v.position ~= nil and v.isDynamic then
-                if #(v.position - playerPos) < (v.distance + config.distanceBeforeUpdatingPos) then
+                local dist = #(v.position - playerPos)
+                if dist < (v.distance + config.distanceBeforeUpdatingPos) then
+                    outOfRangeTicks[v.id] = nil
                     if not isPaused(v.id) then
                         if destroyedMusicList[v.id] then
                             destroyedMusicList[v.id] = nil
@@ -140,12 +161,19 @@ CreateThread(function()
                             PlayMusicFromCache(v)
                         end
                     end
-                else
+                elseif dist > (v.distance + config.distanceBeforeUpdatingPos + hysteresis) then
                     if not destroyedMusicList[v.id] then
-                        destroyedMusicList[v.id] = true
-                        v.wasSilented = false
-                        DestroySilent(v.id)
+                        outOfRangeTicks[v.id] = (outOfRangeTicks[v.id] or 0) + 1
+                        if outOfRangeTicks[v.id] >= destroyDwellTicks then
+                            outOfRangeTicks[v.id] = nil
+                            destroyedMusicList[v.id] = true
+                            v.wasSilented = false
+                            DestroySilent(v.id)
+                        end
                     end
+                else
+                    -- inside the hysteresis band: hold current state
+                    outOfRangeTicks[v.id] = nil
                 end
             end
         end

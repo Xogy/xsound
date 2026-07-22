@@ -60,20 +60,33 @@ function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
     if #(GetEntityCoords(PlayerPedId()) - pos) < 10.0 + config.distanceBeforeUpdatingPos then
         UpdatePlayerPositionInNUI()
         SendNUIMessage({ status = "unmuteAll" })
-    end
 
-    SendNUIMessage({
-        status = "url",
-        name = name_,
-        url = url_,
-        x = pos.x,
-        y = pos.y,
-        z = pos.z,
-        dynamic = true,
-        hasMaxTime = false,
-        volume = volume_,
-        loop = loop_ or false,
-    })
+        SendNUIMessage({
+            status = "url",
+            name = name_,
+            url = url_,
+            x = pos.x,
+            y = pos.y,
+            z = pos.z,
+            dynamic = true,
+            hasMaxTime = false,
+            volume = volume_,
+            loop = loop_ or false,
+        })
+    else
+        -- Out of earshot: don't build a playback player the proximity thread would
+        -- tear down 500ms later. Drop any previous player for this name, resolve
+        -- only the duration so the timestamp thread can track progress; the
+        -- proximity thread recreates the player on approach.
+        destroyedMusicList[name_] = true
+        DestroySilent(name_)
+        SendNUIMessage({
+            status = "getMaxTime",
+            dynamic = true,
+            url = url_,
+            name = name_,
+        })
+    end
 
     if loop_ then
         soundInfo[name_].destroyOnFinish = false

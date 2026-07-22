@@ -23,15 +23,20 @@ end
 
 exports('Position', Position)
 
-function Destroy(name_)
+function Destroy(name_, skipCallbacks)
     SendNUIMessage({
         status = "delete",
         name = name_
     })
+    -- snapshot before clearing: the delegate must not receive nil, and a delegate
+    -- error must not leave the caches behind
+    local info = soundInfo[name_]
     soundInfo[name_] = nil
+    destroyedMusicList[name_] = nil
+    outOfRangeTicks[name_] = nil
 
-    if globalOptionsCache[name_] ~= nil and globalOptionsCache[name_].onPlayEnd ~= nil then
-        globalOptionsCache[name_].onPlayEnd(getInfo(name_))
+    if not skipCallbacks and globalOptionsCache[name_] ~= nil and globalOptionsCache[name_].onPlayEnd ~= nil then
+        pcall(globalOptionsCache[name_].onPlayEnd, info)
     end
 
     globalOptionsCache[name_] = nil
